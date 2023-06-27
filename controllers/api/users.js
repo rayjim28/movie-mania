@@ -3,14 +3,6 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 async function create(req, res) {
-  // baby steps --> this was used to test our front end form
-  // api call functionality
-  // res.json({
-  //   user: {
-  //     name: req.body.name,
-  //     email: req.body.email,
-  //   },
-  // });
 
   try {
     // add the user to the db
@@ -24,7 +16,6 @@ async function create(req, res) {
     res.status(400).json(err);
   }
 }
-
 
 // function to log in a user
 async function login(req, res) {

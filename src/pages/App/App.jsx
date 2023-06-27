@@ -6,6 +6,8 @@ import AuthPage from "../AuthPage/AuthPage";
 import OrderHistoryPage from "../OrderHistoryPage/OrderHistoryPage";
 import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
+// import MovieList from "../../components/MovieList/MovieList";
+import Api from "./api";
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -18,6 +20,7 @@ export default function App() {
           <Routes>
             <Route path="/orders/new" element={<NewOrderPage />} />
             <Route path="/orders" element={<OrderHistoryPage />} />
+            <Route path="/movies" element={<Api />} />
           </Routes>
         </>
       ) : (
