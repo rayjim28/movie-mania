@@ -6,11 +6,11 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // imdbID: {
-    //   type: String,
-    //   required: true,
-    //   unique: true,
-    // },
+    imdbID: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     poster: {
       type: String,
     },

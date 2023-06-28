@@ -1,0 +1,9 @@
+.rental-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 5px solid yellow;
+}

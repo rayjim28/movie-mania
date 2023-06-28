@@ -1,9 +1,11 @@
-import React from 'react'
+export default function RemoveRental({ movie, removeRental }) {
+  const handleRemoveRentalClick = () => {
+    removeRental(movie); // Call the removeRental function when the button is clicked
+  };
 
-export default function RemoveRental() {
-    return (
-        <>
-            <button>Remove Rental</button>
-        </>
-    );
+  return (
+    <>
+      <button onClick={handleRemoveRentalClick}>Remove Rental</button>
+    </>
+  );
 }

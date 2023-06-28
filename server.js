@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
-const movieRouter = require("./routes/api/movies");
+const rentalsRouter = require("./routes/api/rentals");
 require("dotenv").config();
 require("./config/database");
 
@@ -23,7 +23,7 @@ const port = process.env.PORT || 3001;
 
 // Put API routes here, before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
-app.use("/api/movies", movieRouter);
+app.use("/api/rentals", rentalsRouter);
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
