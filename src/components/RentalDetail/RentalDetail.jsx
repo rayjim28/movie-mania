@@ -1,24 +1,34 @@
 import React from "react";
 import "./RentalDetail.css";
 
-export default function RentalDetail({ Rentals }) {
-  console.log("Rentals:", Rentals);
-
-  if (!Rentals) {
-    return null;
-  }
-
+export default function RentalDetail({ rental, removeRentalMovie }) {
   return (
-    <div className="rentals-container">
-      <h2>Rental Detail</h2>
-      <div className="rental-list">
-        {Rentals.map((rental) => (
-          <div key={rental.id} className="rental">{rental.title}
-            <h2 className="rental-title">{rental.title}</h2>
-            <div className="return-date">Return Date: {rental.returnDate}</div>
+    <aside>
+            
+      <div className="rentals-container">
+                
+        <div className="rental-list">
+                    <button onClick={removeRentalMovie}>X</button>
+                    
+          <div key={rental.id} className="rental">
+                        <h2 className="rental-title">{rental.title}</h2>
+                        
+            <div className="return-date">
+                            Price: {rental.price}
+                          
+            </div>
+                        
+            <div className="return-date">
+                            ID: {rental.imdbID}
+                          
+            </div>
+                      
           </div>
-        ))}
+                  
+        </div>
+              
       </div>
-    </div>
+          
+    </aside>
   );
 }

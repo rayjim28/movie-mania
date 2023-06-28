@@ -1,6 +1,6 @@
 export default function RemoveRental({ movie, removeRental }) {
   const handleRemoveRentalClick = () => {
-    removeRental(movie); // Call the removeRental function when the button is clicked
+    removeRental(movie); 
   };
 
   return (

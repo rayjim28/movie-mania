@@ -21,3 +21,19 @@ export async function updateRental(rentalId, rentalData) {
 export async function deleteRental(rentalId) {
   return sendRequest(`${BASE_URL}/${rentalId}`, "DELETE");
 }
+
+export async function checkout(cart) {
+  return sendRequest(`${BASE_URL}/checkout`, "POST", cart);
+}
+
+export async function getCart() {
+  return sendRequest(`${BASE_URL}/cart`, "GET");
+}
+
+export async function addToCart(movie) {
+  return sendRequest(`${BASE_URL}/cart`, "PUT", movie);
+}
+
+export async function removeFromCart(movie) {
+  return sendRequest(`${BASE_URL}/cart/${movie}`, "DELETE");
+}
