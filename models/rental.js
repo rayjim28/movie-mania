@@ -5,6 +5,7 @@ const rentalMovieSchema = require("./rental-item");
 /**
  * Orders
  */
+
 const rentalSchema = new Schema(
   {
     userId: {
@@ -74,8 +75,6 @@ rentalSchema.methods.addMovieToRental = async function ({ cart, body }) {
   cart.rentalDate = body.rentalDate;
   cart.returnDate = body.returnDate;
   return cart.save();
-};
+}; 
 
-const Rental = mongoose.model("Rental", rentalSchema);
-
-module.exports = Rental;
+module.exports = mongoose.model("Rental", rentalSchema);

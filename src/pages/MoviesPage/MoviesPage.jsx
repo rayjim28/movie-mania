@@ -5,6 +5,7 @@ import SearchMovie from "../../components/SearchMovie/SearchMovie";
 import { addToCart, checkout, getCart } from "../../utilities/rentals-api";
 import { getUser } from "../../utilities/users-service";
 import CartList from "../../components/CartList/CartList";
+import { removeFromCart } from "../../utilities/rentals-api"
 
 const API_KEY = process.env.REACT_APP_API_KEY || "69f40c47";
 
@@ -67,12 +68,19 @@ export default function MoviesPage() {
     } catch (error) {
       console.log("Error creating rental:", error);
     }
-  } // Function to remove a movie from the rental list
+  }
+  // Function to remove a movie from the rental list
+  async function removeRentalMovie(rentalId) {
+    try {
+      await removeFromCart(rentalId);
+      const newRentalList = rentals.filter((rental) => rental.imdbID !== rentalId);
+      setRentals(newRentalList);
+    } catch (error) {
+      console.log("Error removing rental movie:", error)
+    }
+    
 
-  function removeRentalMovie(movie) {
-    const newRentalList = rentals.filter((rental) => rental !== movie);
-
-    setRentals(newRentalList);
+    
   }
 
   async function addMovieToRent(movie) {
@@ -135,26 +143,20 @@ export default function MoviesPage() {
 
   return (
     <div>
-            
       <div>
-                
         <MovieHeading heading="Movies" />
-                
         <SearchMovie
           searchMovie={searchMovie}
           setSearchMovie={setSearchMovie}
         />
-              
       </div>
-            
       <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
-            
       <CartList
         rentals={rentals}
         handleCheckout={handleCheckout}
         removeRentalMovie={removeRentalMovie}
+        movies={movies}
       />
-          
     </div>
   );
 }
