@@ -7,7 +7,10 @@ async function getRentalHistory(req, res) {
     const userId = req.user._id; 
 
     console.log("Fetching rentals for user ID:", userId);
+    console.log("this is Rental", Rental);
     const rentals = await Rental.find({ userId: userId, isPaid: true })
+    
+    
 
     console.log("Retrieved rentals:", rentals);
     res.json(rentals);

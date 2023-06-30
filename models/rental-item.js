@@ -34,7 +34,9 @@ const rentalMovieSchema = new Schema(
     },
     price: {
       type: Number,
-      default: 1,
+      default: function () {
+        return parseFloat((Math.random() * 4 + 1).toFixed(2));
+      },
     },
   },
   { timestamps: true }

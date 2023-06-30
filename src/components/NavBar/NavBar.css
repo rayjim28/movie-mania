@@ -1,0 +1,37 @@
+.navbar {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+.navbar-links {
+    display: flex;
+}
+
+.navbar-link {
+    margin-right: 10px;
+    color: #000;
+    text-decoration: none;
+}
+
+.navbar-welcome {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.navbar-link:hover,
+.navbar-brand:hover {
+    text-decoration: underline;
+}
