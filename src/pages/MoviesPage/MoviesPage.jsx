@@ -39,7 +39,13 @@ export default function MoviesPage() {
 
       if (responseJson.Search) {
         // Set the found movies as the state
-        setMovies(responseJson.Search);
+        const movies = responseJson.Search.map((movie) => {
+          if (movie.Poster === "N/A") {
+            movie.Poster = "https://via.placeholder.com/300x300";
+          }
+          return movie;
+        });
+        setMovies(movies);
       } // If the response doesn't have a "Search" property but has a "Title" property, // it means a single movie was found
       else if (responseJson.Title) {
         // Set the single movie as the state (convert it into an array)
@@ -68,8 +74,7 @@ export default function MoviesPage() {
     } catch (error) {
       console.log("Error creating rental:", error);
     }
-  }
-  // Function to remove a movie from the rental list
+  } // Function to remove a movie from the rental list
   async function removeRentalMovie(rentalId) {
     try {
       await removeFromCart(rentalId);
@@ -86,18 +91,12 @@ export default function MoviesPage() {
     console.log("addMovieToRent", movie);
     const isDuplicate = rentals.some(
       (rental) => rental.imdbID === movie.imdbID
-    );
-    // If it's a duplicate, return early and don't add it to the rental list
+    ); // If it's a duplicate, return early and don't add it to the rental list
     if (isDuplicate) {
       console.log("Movie is already in the rental list");
       return;
     }
     try {
-      const price = parseFloat((Math.random() * 4 + 1).toFixed(2));
-      const formattedPrice = `$${price}`;
-      console.log("Price:", price);
-      console.log("Formatted Price:", formattedPrice);
-
       // Create the rental in the backend
       const user = getUser();
       const sevenDaysFromNow = new Date();
@@ -112,10 +111,10 @@ export default function MoviesPage() {
         },
         rentalDate: new Date(),
         returnDate: new Date(sevenDaysFromNow),
-        price: formattedPrice,
       };
       console.log("Rental data:", user, rentalData);
       const createdRental = await addToCart(rentalData);
+      console.log("createdRental", createdRental);
 
       const newMovie = {
         userId: user._id,
@@ -124,7 +123,7 @@ export default function MoviesPage() {
         poster: movie.Poster,
         rentalDate: new Date(),
         returnDate: new Date(sevenDaysFromNow),
-        price: price,
+        price: createdRental.movies[0].price,
       };
       const newRentalList = [...rentals, newMovie];
       setRentals(newRentalList); // Rental successfully created in the backend
@@ -138,7 +137,7 @@ export default function MoviesPage() {
     const fetchData = async () => {
       try {
         const rentalsData = await getCart();
-        console.log(rentalsData);
+        console.log("rentalsData", rentalsData.movies);
         setRentals(rentalsData.movies);
       } catch (error) {
         console.log("Error fetching rentals:", error);
@@ -150,25 +149,38 @@ export default function MoviesPage() {
 
   return (
     <div>
+            
       <div>
+                
         <MovieHeading heading="Movies" />
+                
         <SearchMovie
           searchMovie={searchMovie}
           setSearchMovie={setSearchMovie}
         />
+              
       </div>
+            
       <div className="wrapper">
+                
         <div className="movie-list-wrapper">
+                    
           <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
+                  
         </div>
+                
         <div className="cart-list-wrapper">
+                    
           <CartList
             rentals={rentals}
             handleCheckout={handleCheckout}
             removeRentalMovie={removeRentalMovie}
           />
+                  
         </div>
+              
       </div>
+          
     </div>
   );
 }
