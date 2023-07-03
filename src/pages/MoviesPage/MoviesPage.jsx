@@ -25,10 +25,10 @@ export default function MoviesPage() {
 
     if (searchMovie.startsWith("tt")) {
       // If it starts with "tt", construct the URL for individual search
-      url = `http://www.omdbapi.com/?i=${searchMovie}&apikey=${API_KEY}`;
+      url = `https://www.omdbapi.com/?i=${searchMovie}&apikey=${API_KEY}`;
     } else {
       // If it doesn't start with "tt", construct the URL for general search
-      url = `http://www.omdbapi.com/?s=${searchMovie}&apikey=${API_KEY}`;
+      url = `https://www.omdbapi.com/?s=${searchMovie}&apikey=${API_KEY}`;
     }
 
     try {
