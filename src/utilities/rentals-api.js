@@ -1,6 +1,8 @@
 import sendRequest from "./send-request";
 
-const BASE_URL = "/api/rentals";
+// const BASE_URL = "/api/rentals";
+
+const BASE_URL = "https://movie-mania-api.onrender.com/api/rentals";
 
 export async function getRentalHistory() {
   return sendRequest(`${BASE_URL}/orders`);
