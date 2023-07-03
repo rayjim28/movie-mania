@@ -1,17 +1,3 @@
-/* .rental-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-
-.smaller-poster {
-    width: 100px;
-    height: auto;
-} */
-
 .rentals-container {
     display: flex;
     justify-content: center;

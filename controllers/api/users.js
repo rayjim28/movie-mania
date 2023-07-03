@@ -45,8 +45,6 @@ function checkToken(req, res) {
   res.json(req.exp);
 }
 
-// // // // Helper Functions // // // //
-
 // this is called whenever we need to create a web token
 function createJWT(user) {
   console.log('this is secret in createJWT', process.env.SECRET)
@@ -57,8 +55,6 @@ function createJWT(user) {
     { expiresIn: '24h' }
   )
 }
-
-// // // // // // // // // // // // //
 
 module.exports = {
   create,

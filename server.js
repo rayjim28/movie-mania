@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const favicon = require("serve-favicon");
+// const favicon = require("serve-favicon");
 const logger = require("morgan");
 const rentalsRouter = require("./routes/api/rentals");
 require("dotenv").config();
@@ -13,7 +13,7 @@ app.use(express.json());
 
 // Configure both serve-favicon & static middleware
 // to serve from the production 'build' folder
-app.use(favicon(path.join(__dirname, "build", "favicon.ico")));
+// app.use(favicon(path.join(__dirname, "build", "favicon.ico")));
 app.use(express.static(path.join(__dirname, "build")));
 // Middleware to verify token and assign user object of payload to req.user.
 // Be sure to mount before routes
