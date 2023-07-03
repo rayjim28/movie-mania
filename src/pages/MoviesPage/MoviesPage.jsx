@@ -59,7 +59,7 @@ export default function MoviesPage() {
       }
     } catch (error) {
       // Handle any errors that occur during the API request
-      console.log("Error fetching movie data:", error);
+      console.log("Error fetching movie data:", error.message);
     }
   } // Trigger the movie search request when searchMovie state changes
 
@@ -177,34 +177,5 @@ export default function MoviesPage() {
         </div>
       </div>
     </>
-
-    // <>
-    //   <div className="container">
-    //     <div className="container-movies">
-    //       <div className="col-md-12">
-    //         <MovieHeading heading="Movies" />
-    //         <SearchMovie
-    //           searchMovie={searchMovie}
-    //           setSearchMovie={setSearchMovie}
-    //         />
-    //       </div>
-    //       <div className="col-md-12">
-    //         <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
-    //       </div>
-    //     </div>
-    //     <div className="container-cart">
-    //       <div className="row">
-    //         <div class="col-md-6 col-md-offset-3"></div>
-    //         <div className="col-md-9">
-    //           <CartList
-    //             rentals={rentals}
-    //             handleCheckout={handleCheckout}
-    //             removeRentalMovie={removeRentalMovie}
-    //           />
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </>
   );
 }
