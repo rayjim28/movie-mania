@@ -52,71 +52,84 @@ export default class SignUpForm extends Component {
   render() {
     const disable = this.state.password !== this.state.confirm;
     return (
-      <div className="container">
-        <div className="row justify-content-center align-items-center" style={{ height: "50vh" }}>
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <form autoComplete="off" onSubmit={this.handleSubmit}>
-                  <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Name</label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="form-control"
-                      name="name"
-                      value={this.state.name}
-                      onChange={this.handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="form-control"
-                      name="email"
-                      value={this.state.email}
-                      onChange={this.handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Password</label>
-                    <input
-                      type="password"
-                      id="password"
-                      className="form-control"
-                      name="password"
-                      value={this.state.password}
-                      onChange={this.handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="confirm" className="form-label">Confirm Password</label>
-                    <input
-                      type="password"
-                      id="confirm"
-                      className="form-control"
-                      name="confirm"
-                      value={this.state.confirm}
-                      onChange={this.handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="text-center mt-4">
-                    <button
-                      type="submit"
-                      className="btn btn-success animate__animated animate__bounceIn"
-                      disabled={disable}
-                    >
-                      Sign Up
-                    </button>
-                  </div>
-                </form>
-                <p className="error-message mt-3">{this.state.error}</p>
+      <div>
+        <div className="container">
+          <div
+            className="row justify-content-center align-items-center"
+            style={{ height: "50vh" }}
+          >
+            <div className="col-md-6">
+              <div className="card">
+                <div className="card-body">
+                  <form autoComplete="off" onSubmit={this.handleSubmit}>
+                    <div className="mb-3">
+                      <label htmlFor="name" className="form-label">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        className="form-control"
+                        name="name"
+                        value={this.state.name}
+                        onChange={this.handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="email" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="form-control"
+                        name="email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="password" className="form-label">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="confirm" className="form-label">
+                        Confirm Password
+                      </label>
+                      <input
+                        type="password"
+                        id="confirm"
+                        className="form-control"
+                        name="confirm"
+                        value={this.state.confirm}
+                        onChange={this.handleChange}
+                        required
+                      />
+                    </div>
+                    <div className="text-center mt-4">
+                      <button
+                        type="submit"
+                        className="btn btn-success animate__animated animate__bounceIn"
+                        disabled={disable}
+                      >
+                        Sign Up
+                      </button>
+                    </div>
+                  </form>
+                  <p className="error-message mt-3">{this.state.error}</p>
+                </div>
               </div>
             </div>
           </div>

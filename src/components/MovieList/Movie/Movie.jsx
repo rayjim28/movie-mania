@@ -1,6 +1,11 @@
 import './Movie.css'
 
-export default function Movie({ movie, handleRentMovieClick }) {
+export default function Movie({ movie, handleRentMovieClick, guest }) {
+  function isGuest() {
+    // console.log("this is guest", guest)
+    return !guest ? "AddToRent" : "Log In"; 
+  }
+
   return (
     <div key={movie.imdbID} className="movie">
       <img
@@ -13,7 +18,7 @@ export default function Movie({ movie, handleRentMovieClick }) {
         className="rent-button btn btn-primary"
         onClick={() => handleRentMovieClick(movie)}
       >
-        Add To Rent
+        {isGuest()}
       </button>
     </div>
   );

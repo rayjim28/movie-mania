@@ -7,6 +7,8 @@ import RentalHistoryPage from "../RentalHistoryPage/RentalHistoryPage";
 import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
 import MoviesPage from "../MoviesPage/MoviesPage";
+import GuestNavBar from "../../components/NavBar/GuestNavBar/GuestNavBar";
+import GuestMoviesPage from "../GuestMoviesPage/GuestMoviesPage"
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -34,7 +36,26 @@ export default function App() {
           </Routes>
         </>
       ) : (
-        <AuthPage setUser={setUser} />
+        <>
+          <div>
+            <GuestNavBar />
+          </div>
+          <Routes>
+            <Route
+              path="/login"
+              element={<AuthPage setUser={setUser} />}
+            ></Route>
+            <Route
+              path="/movies"
+              element={
+                <GuestMoviesPage
+                  searchMovie={searchMovie}
+                  setSearchMovie={setSearchMovie}
+                />
+              }
+            />
+          </Routes>
+        </>
       )}
     </main>
   );

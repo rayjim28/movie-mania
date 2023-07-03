@@ -160,13 +160,13 @@ export default function MoviesPage() {
             />
           </div>
           <div className="col-md-12">
-            <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
+            <MovieList movies={movies} handleRentMovieClick={addMovieToRent} guest={false} />
           </div>
         </div>
         <div className="container-cart">
           <div className="row">
-            <div className="col-md-3">{/* Left empty for spacing */}</div>
-            <div className="col-md-9">
+            <div className="col-md-2">{/* Left empty for spacing */}</div>
+            <div className="col-md-10">
                 <CartList
                   rentals={rentals}
                   handleCheckout={handleCheckout}
