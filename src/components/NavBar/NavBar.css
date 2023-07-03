@@ -1,4 +1,30 @@
-.navbar {
+.navbar-brand {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    color: whitesmoke;
+    transition: box-shadow 0.3s;
+}
+
+.navbar-brand:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-link {
+    font-size: 20px;
+    border: none;
+    background-color: black;
+}
+
+.nav-link:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+/* .navbar {
     background-color: #f8f9fa;
     padding: 10px;
 }
@@ -34,4 +60,44 @@
 .navbar-link:hover,
 .navbar-brand:hover {
     text-decoration: underline;
+} */
+
+
+
+
+
+/* second option
+.navbar {
+    background-color: #f8f9fa;
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
 }
+
+.navbar-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navbar-link {
+    margin-right: 10px;
+    color: #000;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.navbar-welcome {
+    margin: 0 10px;
+    font-weight: bold;
+    color: #000;
+    font-size: 18px;
+}
+
+.navbar-link:hover,
+.navbar-brand:hover {
+    text-decoration: underline;
+} */

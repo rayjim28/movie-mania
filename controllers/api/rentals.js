@@ -7,7 +7,7 @@ async function getRentalHistory(req, res) {
 
     console.log("Fetching rentals for user ID:", userId);
     const rentals = await Rental.find({ userId: userId, isPaid: true }).exec();
-    const response = addDatesToMovies(rentals); // console.log("Retrieved rentals:", JSON.stringify(response, null, 2));
+    const response = addDatesToMovies(rentals);
 
     res.json(response);
   } catch (error) {

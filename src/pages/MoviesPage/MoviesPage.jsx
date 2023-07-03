@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "./MoviesPage.css";
 import MovieList from "../../components/MovieList/MovieList";
 import MovieHeading from "../../components/MovieHeading/MovieHeading";
 import SearchMovie from "../../components/SearchMovie/SearchMovie";
@@ -126,7 +127,7 @@ export default function MoviesPage() {
         price: createdRental.movies[0].price,
       };
       const newRentalList = [...rentals, newMovie];
-      setRentals(newRentalList); // Rental successfully created in the backend
+      setRentals(newRentalList);
       console.log("Rental created in the backend:", createdRental);
     } catch (error) {
       console.log("Error creating rental:", error);
@@ -148,39 +149,62 @@ export default function MoviesPage() {
   }, []); // Render the component
 
   return (
-    <div>
-            
-      <div>
-                
-        <MovieHeading heading="Movies" />
-                
-        <SearchMovie
-          searchMovie={searchMovie}
-          setSearchMovie={setSearchMovie}
-        />
-              
-      </div>
-            
-      <div className="wrapper">
-                
-        <div className="movie-list-wrapper">
-                    
-          <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
-                  
+    <>
+      <div className="container">
+        <div className="container-movies">
+          <div className="col-md-12">
+            <MovieHeading heading="Movies" />
+            <SearchMovie
+              searchMovie={searchMovie}
+              setSearchMovie={setSearchMovie}
+            />
+          </div>
+          <div className="col-md-12">
+            <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
+          </div>
         </div>
-                
-        <div className="cart-list-wrapper">
-                    
-          <CartList
-            rentals={rentals}
-            handleCheckout={handleCheckout}
-            removeRentalMovie={removeRentalMovie}
-          />
-                  
+        <div className="container-cart">
+          <div className="row">
+            <div className="col-md-3">{/* Left empty for spacing */}</div>
+            <div className="col-md-9">
+                <CartList
+                  rentals={rentals}
+                  handleCheckout={handleCheckout}
+                  removeRentalMovie={removeRentalMovie}
+                />
+            </div>
+          </div>
         </div>
-              
       </div>
-          
-    </div>
+    </>
+
+    // <>
+    //   <div className="container">
+    //     <div className="container-movies">
+    //       <div className="col-md-12">
+    //         <MovieHeading heading="Movies" />
+    //         <SearchMovie
+    //           searchMovie={searchMovie}
+    //           setSearchMovie={setSearchMovie}
+    //         />
+    //       </div>
+    //       <div className="col-md-12">
+    //         <MovieList movies={movies} handleRentMovieClick={addMovieToRent} />
+    //       </div>
+    //     </div>
+    //     <div className="container-cart">
+    //       <div className="row">
+    //         <div class="col-md-6 col-md-offset-3"></div>
+    //         <div className="col-md-9">
+    //           <CartList
+    //             rentals={rentals}
+    //             handleCheckout={handleCheckout}
+    //             removeRentalMovie={removeRentalMovie}
+    //           />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </>
   );
 }
