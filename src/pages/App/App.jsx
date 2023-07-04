@@ -8,16 +8,17 @@ import NavBar from "../../components/NavBar/NavBar";
 import { getUser } from "../../utilities/users-service";
 import MoviesPage from "../MoviesPage/MoviesPage";
 import GuestNavBar from "../../components/NavBar/GuestNavBar/GuestNavBar";
-import GuestMoviesPage from "../GuestMoviesPage/GuestMoviesPage"
+import GuestMoviesPage from "../GuestMoviesPage/GuestMoviesPage";
+import HomePage from "../HomePage/HomePage";
 
 export default function App() {
   const [user, setUser] = useState(getUser());
-  const [searchMovie, setSearchMovie] = useState("");
+  const [searchMovie, setSearchMovie] = useState("a");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-   useEffect(() => {
-     setIsFirstLoad(false);
-   }, []);
+  useEffect(() => {
+    setIsFirstLoad(false);
+  }, []);
 
   return (
     <main className="App">
@@ -27,6 +28,7 @@ export default function App() {
             <NavBar user={user} setUser={setUser} />
           </div>
           <Routes>
+            <Route exact path="/" element={<HomePage />} />
             <Route path="/orders/new" element={<NewOrderPage />} />
             <Route path="/orders" element={<RentalHistoryPage />} />
             <Route
@@ -45,7 +47,8 @@ export default function App() {
           <div>
             <GuestNavBar />
           </div>
-          <Routes>
+            <Routes>
+              <Route exact path="/" element={<HomePage />} />
             <Route
               path="/login"
               element={<AuthPage setUser={setUser} />}
@@ -62,7 +65,7 @@ export default function App() {
           </Routes>
         </>
       )}
-      {isFirstLoad && <Navigate to="/movies" replace />}
+      {isFirstLoad && <Navigate to="/" replace />}
     </main>
   );
 }

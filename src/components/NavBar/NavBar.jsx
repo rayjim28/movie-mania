@@ -14,7 +14,7 @@ export default function NavBar({ user, setUser }) {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/movies">
+        <Link className="navbar-brand" to="/">
           MoviesMania
         </Link>
         <button
@@ -44,6 +44,11 @@ export default function NavBar({ user, setUser }) {
                 Movies
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Home
+              </Link>
+            </li>
           </ul>
           {user && (
             <ul className="navbar-nav ms-auto">
@@ -51,7 +56,7 @@ export default function NavBar({ user, setUser }) {
                 <h5 className="navbar-text me-5">Welcome, {user.name}</h5>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/movies" onClick={handleLogOut}>
+                <Link className="nav-link" to="/" onClick={handleLogOut}>
                   Log Out
                 </Link>
               </li>

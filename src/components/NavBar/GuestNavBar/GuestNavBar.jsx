@@ -7,7 +7,7 @@ export default function GuestNavBar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/movies">
+        <Link className="navbar-brand" to="/">
           MoviesMania
         </Link>
         <button
