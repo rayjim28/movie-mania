@@ -1,6 +1,6 @@
 import "./App.css";
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import NewOrderPage from "../NewOrderPage/NewOrderPage";
 import AuthPage from "../AuthPage/AuthPage";
 import RentalHistoryPage from "../RentalHistoryPage/RentalHistoryPage";
@@ -13,6 +13,11 @@ import GuestMoviesPage from "../GuestMoviesPage/GuestMoviesPage"
 export default function App() {
   const [user, setUser] = useState(getUser());
   const [searchMovie, setSearchMovie] = useState("");
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+
+   useEffect(() => {
+     setIsFirstLoad(false);
+   }, []);
 
   return (
     <main className="App">
@@ -57,6 +62,7 @@ export default function App() {
           </Routes>
         </>
       )}
+      {isFirstLoad && <Navigate to="/movies" replace />}
     </main>
   );
 }

@@ -5,7 +5,7 @@ const BASE_URL = "https://movie-mania-api.onrender.com/api/users";
 
 
 export  async function signUp(userData) {
-  return sendRequest(BASE_URL, "POST", userData);
+  return sendRequest(`${BASE_URL}/movies`,  "POST", userData);
 }
 
 export async function login(credentials) {
