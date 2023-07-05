@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const favicon = require("serve-favicon");
+// const favicon = require("serve-favicon");
 const logger = require("morgan");
 const cors = require("cors");
 const rentalsRouter = require("./routes/api/rentals");
@@ -19,7 +19,7 @@ app.use(express.json());
 // to serve from the production 'build' folder
 
 // Serve favicon.ico file
-app.use(favicon(path.join(__dirname, "build", "favicon.ico")));
+// app.use(favicon(path.join(__dirname, "build", "favicon.ico")));
 
 // Serve static files from the 'build' folder
 app.use(express.static(path.join(__dirname, "build")));

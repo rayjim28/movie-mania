@@ -12,13 +12,14 @@ export default function NavBar({ user, setUser }) {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-light bg-dark">
       <div className="container-fluid">
         {/* Brand link to the home page */}
         <Link className="navbar-brand" to="/">
           MoviesMania
         </Link>
         {/* Toggle button for collapsing the navigation */}
+        {/* Will get to it soon */}
         <button
           className="navbar-toggler"
           type="button"
