@@ -5,6 +5,7 @@
 The Movie Mania App is a platform where users can rent movies and TV series for their entertainment. It provides a user-friendly interface for browsing a wide range of movies and TV shows and allows users to easily rent their favorite titles for a specified duration. With a vast collection of content, the app caters to various genres and preferences, ensuring an enjoyable user-interface experience.
 
 ## Screenshots
+![Movies](https://i.imgur.com/bAD4j5h.png)
 ![Movies](https://i.imgur.com/O3rQbFH.png)
 
 
