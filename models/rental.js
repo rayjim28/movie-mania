@@ -2,10 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const rentalMovieSchema = require("./rental-item");
 
-/**
- * Orders
- */
-
+// Define the rental schema
 const rentalSchema = new Schema(
   {
     userId: {
@@ -24,7 +21,7 @@ const rentalSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    movies: [rentalMovieSchema],
+    movies: [rentalMovieSchema], // Array of movies in the rental
   },
   {
     timestamps: true,
@@ -34,31 +31,33 @@ const rentalSchema = new Schema(
   }
 );
 
+// Calculate the total order amount (sum of movie prices)
 rentalSchema.virtual("orderTotal").get(function () {
   return this.movies.reduce((total, item) => total + item.price, 0);
 });
 
+// Get the total quantity of movies in the rental
 rentalSchema.virtual("totalQty").get(function () {
   return this.movies.length;
 });
 
+// Get the rental cart (unpaid rental) for a user
 rentalSchema.statics.getCart = function (userId) {
   return this.findOneAndUpdate(
     { userId: userId, isPaid: false },
     { userId: userId },
     { upsert: true, new: true }
   ).catch((error) => {
-    console.log("getCart error", error);
     throw new Error(error);
   });
 };
 
+// Get the rental ID
 rentalSchema.virtual("rentalId").get(function () {
-  console.log("Getting rentalId");
   return this.id.slice(-6).toUpperCase();
 });
 
-// Instance method for adding an item to a rental's order (unpaid rental)
+// Instance method for adding a movie to the rental's order (unpaid rental)
 rentalSchema.methods.addMovieToRental = async function ({ cart, body }) {
   // Check if the movie already exists in the rental's movies list
   const lineItem = cart.movies.find(
@@ -69,12 +68,13 @@ rentalSchema.methods.addMovieToRental = async function ({ cart, body }) {
     // It already exists, so skip duplicates
     return null;
   } else {
-    // Add the item to the order's movies list
+    // Add the movie to the order's movies list
     cart.movies.push({ ...body.movie });
   }
   cart.rentalDate = body.rentalDate;
   cart.returnDate = body.returnDate;
   return cart.save();
-}; 
+};
 
+// Export the Rental model with the defined schema
 module.exports = mongoose.model("Rental", rentalSchema);

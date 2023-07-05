@@ -1,23 +1,35 @@
 import { getToken } from "./users-service";
 
+// Function to send an HTTP request to the specified URL with the given method and payload
 export default async function sendRequest(url, method = "GET", payload = null) {
-  // Fetch accepts an options object as the 2nd argument
-  // used to include a data payload, set headers, etc.
+  // Create an options object to configure the request
   const options = { method };
+
+  // Check if a payload is provided
   if (payload) {
     options.headers = { "Content-Type": "application/json" };
     options.body = JSON.stringify(payload);
   }
+
+  // Get the token from the user's session
   const token = getToken();
+
+  // Check if a token exists
   if (token) {
     // Ensure the headers object exists
     options.headers ||= {};
-    // Add token to an Authorization header
-    // Prefacing with 'Bearer' is recommended in the HTTP specification
+
+    // Add the token to the Authorization header with the 'Bearer' prefix
     options.headers.Authorization = `Bearer ${token}`;
   }
+
+  // Send the HTTP request using fetch
   const res = await fetch(url, options);
-  // res.ok will be false if the status code set to 4xx in the controller action
-  if (res.ok) return res.json();
-  throw new Error("Bad Request");
+
+  // Check if the response is successful (status code 2xx)
+  if (res.ok) {
+    return res.json(); // Return the JSON response
+  } else {
+    throw new Error("Bad Request"); // Throw an error for unsuccessful response
+  }
 }

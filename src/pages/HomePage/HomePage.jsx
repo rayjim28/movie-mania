@@ -1,13 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import './HomePage.css'
+import "./HomePage.css";
 
 function HomePage() {
   const [movies, setMovies] = useState([]);
   const fetch = require("node-fetch");
 
+  // API URL for fetching popular movies
   const url =
     "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc";
+
+  // API request options
   const options = {
     method: "GET",
     headers: {
@@ -18,11 +21,12 @@ function HomePage() {
   };
 
   useEffect(() => {
+    // Fetch popular movies from the API
     fetch(url, options)
       .then((res) => res.json())
       .then((json) => setMovies(json.results))
       .catch((err) => console.error("error:" + err));
-  }, []);
+  });
 
   return (
     <div>
@@ -30,7 +34,8 @@ function HomePage() {
       <div className="home-movie-posters">
         {movies.map((elm, idx) => {
           return (
-            <div className="poster-path"
+            <div
+              className="poster-path"
               key={idx}
               style={{
                 backgroundImage: `url("https://www.themoviedb.org/t/p/original${elm.poster_path}")`,

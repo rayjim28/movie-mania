@@ -1,65 +1,77 @@
-// to import all named exports we use this syntax
+// Import all named exports from "users-api.js"
 import * as usersApi from "./users-api";
 
+// Function to sign up a new user
 export async function signUp(userData) {
   console.log("this is userData in service", userData);
+
   // Delegate the network request code to the users-api.js API Module
   // Which will ultimately return a JSON web Token
   const token = await usersApi.signUp(userData);
-  // save the token to local storage
+
+  // Save the token to local storage
   localStorage.setItem("token", token);
-  // we'll return the token that we received from the api
+
+  // Return the user data
   return getUser();
 }
 
+// Function to log in a user
 export async function login(credentials) {
   try {
+    // Call the login function from users-api.js
     const token = await usersApi.login(credentials);
+
+    // Save the token to local storage
     localStorage.setItem("token", token);
+
+    // Return the user data
     return getUser();
   } catch {
+    // Throw an error if login fails
     throw new Error("Bad Credentials");
   }
 }
 
-// getToken function - assesses the token in local storage
+// Function to get the token from local storage
 export function getToken() {
-  //getItem, a method of the local storage object
-  // returns null if there is no string
+  // Get the token from local storage
   const token = localStorage.getItem("token");
+
+  // If no token exists, return null
   if (!token) return null;
 
-  // obtain the payload of the token
+  // Decode the payload of the token
   const payload = JSON.parse(atob(token.split(".")[1]));
-  // a JWT's expiration is expressed in seconds, not milliseconds
+
+  // Check if the token has expired
   if (payload.exp < Date.now() / 1000) {
-    // token is expired, remove it from local storage
+    // Token is expired, remove it from local storage
     localStorage.removeItem("token");
     return null;
   }
+
+  // Return the token
   return token;
 }
 
-// getUser function - parses the data from the token's payload
+// Function to get the user data from the token
 export function getUser() {
+  // Get the token
   const token = getToken();
 
-  // if there is a token, return the user in the payload
+  // If a token exists, return the user data from the payload
   return token ? JSON.parse(atob(token.split(".")[1])).user : null;
 }
 
-// logout function --> which deletes the token from our local storage
+// Function to log out a user
 export function logOut() {
+  // Remove the token from local storage
   localStorage.removeItem("token");
 }
 
+// Function to check the validity of a token
 export function checkToken() {
-  // Just so that you don't forget how to use .then
-  return (
-    usersApi
-      .checkToken()
-      // checkToken returns a string, but let's
-      // make it a Date object for more flexibility
-      .then((dateStr) => new Date(dateStr))
-  );
+  // Call the checkToken function from users-api.js and return a Promise
+  return usersApi.checkToken().then((dateStr) => new Date(dateStr));
 }

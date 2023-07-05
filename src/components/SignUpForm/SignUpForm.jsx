@@ -1,11 +1,8 @@
 import { Component } from "react";
 import { signUp } from "../../utilities/users-service";
-// we need to export our class components just like always
-// one of the key distinctions between classes and function components is the extends keyword
-// This tells our code "get a;ll the good stuff from Component, but let me make it work for my purpose"
+
 export default class SignUpForm extends Component {
-  // Class components handle state differently than functions
-  // instead of hooks, we use the class field called state
+  // Define initial state using the class field syntax
   state = {
     name: "",
     email: "",
@@ -14,43 +11,38 @@ export default class SignUpForm extends Component {
     error: "",
   };
 
-  // handleChange method -> handles user input in the form
-  // looks at the name of the input field, and updates the value associated with that input field in state
+  // Event handler for input changes
   handleChange = (evt) => {
-    // we'll look at the event, gather information from the event, update state
+    // Update the corresponding state property based on the input field's name and value
     this.setState({
-      // we can use a specific syntax, to dynamically gather data from the form
       [evt.target.name]: evt.target.value,
       error: "",
     });
   };
 
+  // Event handler for form submission
   handleSubmit = async (evt) => {
     evt.preventDefault();
 
-    // This was to make this function do something for testing our component
-    // alert(JSON.stringify(this.state));
-
     try {
-      // This is where we'll run our api call
-      // we'll start our api call process with a copy of the state object
+      // Copy the form data from state and remove unnecessary properties
       const formData = { ...this.state };
       delete formData.error;
       delete formData.confirm;
-      // another way to handle this is with destructuring
-      // const { name, email, password } = this.state
-      // const formData = { name, email, password }
+
+      // Call the signUp function from the users-service to register the user
       const user = await signUp(formData);
       this.props.setUser(user);
     } catch {
-      // handle our errors
+      // Handle errors if sign up fails
       this.setState({ error: "Sign Up Failed - Try Again" });
     }
   };
-  // Every single class component NEEDS a render method
-  // This render method tells our app what this component returns
+
   render() {
+    // Determine if the Sign Up button should be disabled based on password and confirm password matching
     const disable = this.state.password !== this.state.confirm;
+
     return (
       <div>
         <div className="container">
@@ -62,6 +54,7 @@ export default class SignUpForm extends Component {
               <div className="card">
                 <div className="card-body">
                   <form autoComplete="off" onSubmit={this.handleSubmit}>
+                    {/* Name input field */}
                     <div className="mb-3">
                       <label htmlFor="name" className="form-label">
                         Name
@@ -76,6 +69,7 @@ export default class SignUpForm extends Component {
                         required
                       />
                     </div>
+                    {/* Email input field */}
                     <div className="mb-3">
                       <label htmlFor="email" className="form-label">
                         Email
@@ -90,6 +84,7 @@ export default class SignUpForm extends Component {
                         required
                       />
                     </div>
+                    {/* Password input field */}
                     <div className="mb-3">
                       <label htmlFor="password" className="form-label">
                         Password
@@ -104,6 +99,7 @@ export default class SignUpForm extends Component {
                         required
                       />
                     </div>
+                    {/* Confirm Password input field */}
                     <div className="mb-3">
                       <label htmlFor="confirm" className="form-label">
                         Confirm Password
@@ -118,6 +114,7 @@ export default class SignUpForm extends Component {
                         required
                       />
                     </div>
+                    {/* Sign Up button */}
                     <div className="text-center mt-4">
                       <button
                         type="submit"
@@ -128,6 +125,7 @@ export default class SignUpForm extends Component {
                       </button>
                     </div>
                   </form>
+                  {/* Error message */}
                   <p className="error-message mt-3">{this.state.error}</p>
                 </div>
               </div>
@@ -138,5 +136,3 @@ export default class SignUpForm extends Component {
     );
   }
 }
-
-

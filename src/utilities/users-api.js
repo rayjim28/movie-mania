@@ -1,18 +1,19 @@
 import sendRequest from "./send-request";
-// we need a base path that we can use to refer our requests to the location of our routes
-// const BASE_URL = "/api/users";
+
+// Define the base URL for user-related API endpoints
 const BASE_URL = "https://movie-mania-api.onrender.com/api/users";
 
-
-export  async function signUp(userData) {
-  return sendRequest(`${BASE_URL}/movies`,  "POST", userData);
+// Function to sign up a new user
+export async function signUp(userData) {
+  return sendRequest(`${BASE_URL}/`, "POST", userData);
 }
 
+// Function to log in a user
 export async function login(credentials) {
   return sendRequest(`${BASE_URL}/login`, "POST", credentials);
 }
 
+// Function to check the validity of a token
 export async function checkToken() {
   return sendRequest(`${BASE_URL}/check-token`);
 }
-

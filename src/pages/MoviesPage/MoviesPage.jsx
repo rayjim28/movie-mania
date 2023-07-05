@@ -16,14 +16,16 @@ export default function MoviesPage() {
   const [searchMovie, setSearchMovie] = useState("");
   const [rentals, setRentals] = useState([]);
 
+  // Fetch movie data from the API based on the search query
   async function getMovieRequest(searchMovie) {
     let url;
 
     if (searchMovie === "") {
       return Promise.resolve();
-    } // Check if the searchMovie starts with "tt" indicating an individual search
+    }
 
-    if (searchMovie.startsWith("tt")) {
+    // Check if the searchMovie starts with "a" indicating an individual search
+    if (searchMovie.startsWith("a")) {
       // If it starts with "tt", construct the URL for individual search
       url = `https://www.omdbapi.com/?i=${searchMovie}&apikey=${API_KEY}`;
     } else {
@@ -36,19 +38,20 @@ export default function MoviesPage() {
       const response = await fetch(url);
       const responseJson = await response.json();
 
-      console.log("API_RESPONSE", responseJson); // Check if the response has a "Search" property, indicating multiple movies were found
-
+      // Check if the response has a "Search" property, indicating multiple movies were found
       if (responseJson.Search) {
         // Set the found movies as the state
         const movies = responseJson.Search.map((movie) => {
           if (movie.Poster === "N/A") {
+            // If the movie poster is not available, use a placeholder image
             movie.Poster = "https://via.placeholder.com/300x300";
           }
           return movie;
         });
         setMovies(movies);
-      } // If the response doesn't have a "Search" property but has a "Title" property, // it means a single movie was found
-      else if (responseJson.Title) {
+      } else if (responseJson.Title) {
+        // If the response doesn't have a "Search" property but has a "Title" property,
+        // it means a single movie was found
         // Set the single movie as the state (convert it into an array)
         setMovies([responseJson]);
       } else if (responseJson.Error) {
@@ -61,12 +64,14 @@ export default function MoviesPage() {
       // Handle any errors that occur during the API request
       console.log("Error fetching movie data:", error.message);
     }
-  } // Trigger the movie search request when searchMovie state changes
+  }
 
+  // Trigger the movie search request when searchMovie state changes
   useEffect(() => {
     getMovieRequest(searchMovie);
-  }, [searchMovie]); // Function to add a movie to the rental list and save it to the backend
+  }, [searchMovie]);
 
+  // Function to handle checkout and create the rental in the backend
   async function handleCheckout() {
     try {
       const createdRental = await checkout(rentals);
@@ -75,7 +80,9 @@ export default function MoviesPage() {
     } catch (error) {
       console.log("Error creating rental:", error);
     }
-  } // Function to remove a movie from the rental list
+  }
+
+  // Function to remove a movie from the rental list
   async function removeRentalMovie(rentalId) {
     try {
       await removeFromCart(rentalId);
@@ -88,15 +95,18 @@ export default function MoviesPage() {
     }
   }
 
+  // Function to add a movie to the rental list and save it to the backend
   async function addMovieToRent(movie) {
-    console.log("addMovieToRent", movie);
     const isDuplicate = rentals.some(
       (rental) => rental.imdbID === movie.imdbID
-    ); // If it's a duplicate, return early and don't add it to the rental list
+    );
+
+    // If it's a duplicate, return early and don't add it to the rental list
     if (isDuplicate) {
       console.log("Movie is already in the rental list");
       return;
     }
+
     try {
       // Create the rental in the backend
       const user = getUser();
@@ -113,9 +123,8 @@ export default function MoviesPage() {
         rentalDate: new Date(),
         returnDate: new Date(sevenDaysFromNow),
       };
-      console.log("Rental data:", user, rentalData);
+
       const createdRental = await addToCart(rentalData);
-      console.log("createdRental", createdRental);
 
       const newMovie = {
         userId: user._id,
@@ -126,19 +135,19 @@ export default function MoviesPage() {
         returnDate: new Date(sevenDaysFromNow),
         price: createdRental.movies[0].price,
       };
+
       const newRentalList = [...rentals, newMovie];
       setRentals(newRentalList);
-      console.log("Rental created in the backend:", createdRental);
     } catch (error) {
       console.log("Error creating rental:", error);
     }
   }
 
+  // Fetch the rental list from the backend
   useEffect(() => {
     const fetchData = async () => {
       try {
         const rentalsData = await getCart();
-        console.log("rentalsData", rentalsData.movies);
         setRentals(rentalsData.movies);
       } catch (error) {
         console.log("Error fetching rentals:", error);
@@ -146,32 +155,42 @@ export default function MoviesPage() {
     };
 
     fetchData();
-  }, []); // Render the component
+  }, []);
 
   return (
     <>
       <div className="container">
+        {/* Movie section */}
         <div className="container-movies">
           <div className="col-md-12">
+            {/* Movie heading */}
             <MovieHeading heading="Movies" />
+            {/* Search input */}
             <SearchMovie
               searchMovie={searchMovie}
               setSearchMovie={setSearchMovie}
             />
           </div>
           <div className="col-md-12">
-            <MovieList movies={movies} handleRentMovieClick={addMovieToRent} guest={false} />
+            {/* Movie list */}
+            <MovieList
+              movies={movies}
+              handleRentMovieClick={addMovieToRent}
+              guest={false}
+            />
           </div>
         </div>
+        {/* Cart section */}
         <div className="container-cart">
           <div className="row">
             <div className="col-md-2">{/* Left empty for spacing */}</div>
             <div className="col-md-10">
-                <CartList
-                  rentals={rentals}
-                  handleCheckout={handleCheckout}
-                  removeRentalMovie={removeRentalMovie}
-                />
+              {/* Cart list */}
+              <CartList
+                rentals={rentals}
+                handleCheckout={handleCheckout}
+                removeRentalMovie={removeRentalMovie}
+              />
             </div>
           </div>
         </div>

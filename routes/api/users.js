@@ -2,16 +2,19 @@ const express = require("express");
 const router = express.Router();
 const usersCtrl = require("../../controllers/api/users");
 // require the authorization middleware function
-const ensureLoggedIn = require('../../config/ensureLoggedIn');
+const ensureLoggedIn = require("../../config/ensureLoggedIn");
 
-//POST route to handle a controller function(currently tbd)
+// POST route for user creation
 router.post("/", usersCtrl.create);
-// Post route to handle log in controller
-router.post("/login", usersCtrl.login);
-// GET /api/users/check-token
-router.get('/check-token', usersCtrl.checkToken);
-// Insert ensureLoggedIn on all routes that need protecting
-router.get('/check-token', ensureLoggedIn, usersCtrl.checkToken);
 
-// we need to export our router
+// POST route for user login
+router.post("/login", usersCtrl.login);
+
+// GET route for checking token validity
+router.get("/check-token", usersCtrl.checkToken);
+
+// Insert ensureLoggedIn middleware to protect the routes
+router.get("/check-token", ensureLoggedIn, usersCtrl.checkToken);
+
+// Export the router
 module.exports = router;

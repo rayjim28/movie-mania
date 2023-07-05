@@ -2,14 +2,17 @@ import { Link } from "react-router-dom";
 import "../NavBar.css";
 
 export default function GuestNavBar() {
+  // Function for handling the log in action
   async function handleLogIn() {}
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
+        {/* Brand link to the home page */}
         <Link className="navbar-brand" to="/">
           MoviesMania
         </Link>
+        {/* Toggle button for collapsing the navigation */}
         <button
           className="navbar-toggler"
           type="button"
@@ -23,6 +26,7 @@ export default function GuestNavBar() {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
+            {/* Navigation item for the Movies page */}
             <li className="nav-item">
               <Link className="nav-link" to="/movies">
                 Movies
@@ -30,6 +34,7 @@ export default function GuestNavBar() {
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
+            {/* Navigation item for the Sign Up page */}
             <li className="nav-item">
               <Link className="nav-link" to="/login" onClick={handleLogIn}>
                 Sign Up

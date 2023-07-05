@@ -1,12 +1,14 @@
 const Rental = require("../../models/rental");
-// Rest of the rental endpoints (getAllRentals, getRentalById, createRental, updateRental, deleteRental)
 
+// Fetch rental history for a user
 async function getRentalHistory(req, res) {
   try {
     const userId = req.user._id;
 
-    console.log("Fetching rentals for user ID:", userId);
+    // Retrieve rentals for the user who has paid
     const rentals = await Rental.find({ userId: userId, isPaid: true }).exec();
+
+    // Add rental and return dates to each movie in the rental
     const response = addDatesToMovies(rentals);
 
     res.json(response);
@@ -27,7 +29,7 @@ function addDatesToMovies(rentals) {
         ...movie.toObject(),
       };
     });
-    console.log(movies);
+
     rental = rental.toObject();
     rental.movies = movies;
     return rental;
@@ -39,8 +41,10 @@ async function getCart(req, res) {
   try {
     const userId = req.user._id;
     const cart = await Rental.getCart(userId);
-    console.log("cart", cart);
+
+    // Add rental and return dates to the cart
     const response = addDatesToMovies([cart]);
+
     res.json(response[0]);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch cart" });
@@ -52,8 +56,10 @@ async function addToCart(req, res) {
   try {
     const userId = req.user._id;
     const cart = await Rental.getCart(userId);
-    console.log("cart", userId, cart, req.body);
+
+    // Add the movie to the rental cart
     await cart.addMovieToRental({ cart, body: req.body });
+
     res.json(cart);
   } catch (error) {
     console.log(error);
@@ -61,17 +67,20 @@ async function addToCart(req, res) {
   }
 }
 
+// Remove a movie from the rental cart
 async function removeFromCart(req, res) {
   try {
     const userId = req.user._id;
     const cart = await Rental.getCart(userId);
     const itemId = req.params.id;
-    console.log(cart.movies);
-    console.log(itemId);
+
+    // Filter out the movie with the given itemId from the cart
     cart.movies = cart.movies.filter(
       (movie) => movie.imdbID.toString() !== itemId
     );
+
     await cart.save();
+
     res.json(cart);
   } catch (error) {
     console.log(error);
@@ -84,11 +93,16 @@ async function checkout(req, res) {
   try {
     const userId = req.user._id;
     const cart = await Rental.getCart(userId);
+
     if (cart.movies.length === 0) {
       return res.status(400).json({ error: "Cannot checkout empty cart" });
     }
+
+    // Mark the cart as paid
     cart.isPaid = true;
+
     await cart.save();
+
     res.json(cart);
   } catch (error) {
     console.log(error);

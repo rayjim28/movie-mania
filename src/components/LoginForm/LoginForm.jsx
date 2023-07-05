@@ -6,25 +6,21 @@ export default function LoginForm({ setUser }) {
   const [error, setError] = useState("");
 
   function handleChange(evt) {
-    // this.setState({
-    //     [evt.target.name]: evt.target.value,
-    //     error: ''
-    // })
+    // Update the corresponding input field value in the credentials state
     setCredentials({ ...credentials, [evt.target.name]: evt.target.value });
     setError("");
   }
 
-  // handleSubmit
+  // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
 
     try {
+      // Call the login function from the users-service utility to log in the user
       const user = await login(credentials);
-      // console.log('credentials in login', credentials)
       setUser(user);
     } catch {
-      // handle our errors
-      // this.setState({ error: 'Sign Up Failed - Try Again'})
+      // Handle login errors
       setError("Log In Failed - Try Again");
     }
   }
