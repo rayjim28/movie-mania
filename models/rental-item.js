@@ -18,7 +18,7 @@ const rentalMovieSchema = new Schema(
     price: {
       type: Number,
       default: function () {
-        // Set a default random price between 1 and 5
+        // Setting a default random price between 1 and 5
         return parseFloat((Math.random() * 4 + 1).toFixed(2));
       },
     },

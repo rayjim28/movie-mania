@@ -6,7 +6,7 @@ export default function GuestNavBar() {
   async function handleLogIn() {}
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-light bg-dark">
       <div className="container-fluid">
         {/* Brand link to the home page */}
         <Link className="navbar-brand" to="/">
