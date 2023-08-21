@@ -40,23 +40,29 @@ export default function CartList({
 
   return (
     <div>
-      <div className="cart-info">
-        <span>Return Date: </span> <span>{getReturnDate()}</span>
+    <div className="cart-info row mb-3">
+      <div className="col-6">
+        <strong>Return Date:</strong>
       </div>
-      <h2 className="mb-3">Movie Cart</h2>
-      <div className="total mb-3">Total: ${calculateTotal()}</div>
-      <button className="btn btn-success" onClick={handleCheckout}>
-        Checkout
-      </button>
-      <div className="rental-list">
-        {rentals.map((rental, idx) => (
-          <RentalDetail
-            key={idx}
-            rental={rental}
-            removeRentalMovie={handleRemoveRental}
-          />
-        ))}
-      </div>
+      <div className="col-6">{getReturnDate()}</div>
     </div>
+    <h2 className="mb-3">Movie Cart</h2>
+    <div className="total mb-3 row">
+      <div className="col-6">
+        <strong>Total:</strong>
+      </div>
+      <div className="col-6">${calculateTotal()}</div>
+    </div>
+    <button className="btn btn-success mb-3" onClick={handleCheckout}>
+      Checkout
+    </button>
+    <div className="rental-list">
+      {rentals.map((rental, idx) => (
+        <div className="rental-row row mb-2" key={idx}>
+          <RentalDetail rental={rental} removeRentalMovie={handleRemoveRental} />
+        </div>
+      ))}
+    </div>
+  </div>
   );
 }

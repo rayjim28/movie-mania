@@ -158,43 +158,27 @@ export default function MoviesPage() {
   }, []);
 
   return (
-    <>
-      <div className="container">
-        {/* Movie section */}
-        <div className="container-movies">
-          <div className="col-md-12">
-            {/* Movie heading */}
-            <MovieHeading heading="Movies" />
-            {/* Search input */}
-            <SearchMovie
-              searchMovie={searchMovie}
-              setSearchMovie={setSearchMovie}
-            />
-          </div>
-          <div className="col-md-12">
-            {/* Movie list */}
-            <MovieList
-              movies={movies}
-              handleRentMovieClick={addMovieToRent}
-              guest={false}
-            />
-          </div>
-        </div>
-        {/* Cart section */}
-        <div className="container-cart">
-          <div className="row">
-            <div className="col-md-2">{/* Left empty for spacing */}</div>
-            <div className="col-md-10">
-              {/* Cart list */}
-              <CartList
-                rentals={rentals}
-                handleCheckout={handleCheckout}
-                removeRentalMovie={removeRentalMovie}
-              />
-            </div>
-          </div>
-        </div>
+    <div className="container-fluid">
+    <div className="row">
+      {/* Movie section */}
+      <div className="col-md-8">
+        {/* Movie heading */}
+        <MovieHeading heading="Movies" />
+        {/* Search input */}
+        <SearchMovie searchMovie={searchMovie} setSearchMovie={setSearchMovie} />
+        {/* Movie list */}
+        <MovieList movies={movies} handleRentMovieClick={addMovieToRent} guest={false} />
       </div>
-    </>
+      {/* Cart section */}
+      <div className="col-md-4">
+        {/* Cart list */}
+        <CartList
+          rentals={rentals}
+          handleCheckout={handleCheckout}
+          removeRentalMovie={removeRentalMovie}
+        />
+      </div>
+    </div>
+  </div>
   );
 }

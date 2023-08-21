@@ -1,4 +1,4 @@
-.rentals-container {
+/* .rentals-container {
     display: flex;
     justify-content: center;
 }
@@ -25,4 +25,26 @@
 .row-cols-2>.col {
     flex-basis: 50%;
     max-width: 50%;
+} */
+
+.rental-row {
+    align-items: center;
+    margin-bottom: 15px;
+    border: 0.5px dashed black;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.poster-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.rental-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.return-price {
+    font-size: 14px;
 }

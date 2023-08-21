@@ -12,7 +12,7 @@ export default function NavBar({ user, setUser }) {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-light custom-navbar">
       <div className="container-fluid">
         {/* Brand link to the home page */}
         <Link className="navbar-brand" to="/">

@@ -1,20 +1,28 @@
 .navbar-brand {
     text-decoration: none;
     padding: 0.5rem 1rem;
-    color: black;
+    color: rgb(254, 254, 254);
     transition: box-shadow 0.3s;
 }
 
 .navbar-brand:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(253, 251, 251, 0.2);
 }
 
 .navbar-link {
     font-size: 20px;
     border: none;
-    background-color: black;
+    background-color: rgb(255, 255, 255);
 }
 
 .nav-link:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgb(248, 3, 3);
+}
+
+.custom-navbar {
+    background-color: #00695dcf;  /* Deep Teal */
+}
+
+.nav-item {
+    margin-right: 20px; 
 }

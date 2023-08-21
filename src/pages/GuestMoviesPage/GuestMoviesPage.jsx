@@ -73,25 +73,25 @@ export default function GuestMoviesPage() {
   }
 
   return (
-    <>
-      <div className="container">
-        <div className="container-movies">
-          <div className="col-md-12">
-            <MovieHeading heading="Movies" />
-            <SearchMovie
-              searchMovie={searchMovie}
-              setSearchMovie={setSearchMovie}
-            />
-          </div>
-          <div className="col-md-12">
-            <MovieList
-              movies={movies}
-              handleRentMovieClick={handleAdd}
-              guest={true}
-            />
-          </div>
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-12">
+          <MovieHeading heading="Movies" />
+        </div>
+        <div className="col-md-12 my-4">
+          <SearchMovie
+            searchMovie={searchMovie}
+            setSearchMovie={setSearchMovie}
+          />
+        </div>
+        <div className="col-md-12 mt-4">
+          <MovieList
+            movies={movies}
+            handleRentMovieClick={handleAdd}
+            guest={true}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 }

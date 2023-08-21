@@ -48,8 +48,7 @@ export default class SignUpForm extends Component {
         <div className="container">
           <div
             className="row justify-content-center align-items-center"
-            style={{ height: "50vh" }}
-          >
+            style={{ height: "50vh" }}>
             <div className="col-md-6">
               <div className="card">
                 <div className="card-body">
@@ -136,3 +135,5 @@ export default class SignUpForm extends Component {
     );
   }
 }
+
+

@@ -1,13 +1,29 @@
-* {
-  background-color: white;
+body {
+  /* Setting up the gradient background for the whole app */
+  background: linear-gradient(to right, rgba(127, 118, 118, 0.936), #6666666a, rgb(165, 156, 156));
   color: black;
+  font-family: Arial, sans-serif; 
+  margin: 0;
+  padding: 0;
 }
 
 .App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 }
 
-.App-logo {
+.navbar-shadow-gradient {
+  background-color: linear-gradient(to right, black, #444, white);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+/* 
+
+
+ .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -28,7 +44,6 @@
   font-size: calc(10px + 2vmin);
   color: white;
   @media screen and (max-width: 480px) {
-    /* Styles for small screens (e.g., iPhones) */
     font-size: 16px;
   }
 }
@@ -45,4 +60,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */ 

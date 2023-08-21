@@ -21,7 +21,7 @@ export default function App() {
       {user ? (
         // Render components for authenticated user
         <>
-          <div>
+          <div className="navbar-shadow-gradient">
             <NavBar user={user} setUser={setUser} />
           </div>
           <Routes>
@@ -42,7 +42,7 @@ export default function App() {
       ) : (
         // Render components for guest user
         <>
-          <div>
+          <div className="navbar-shadow-gradient">
             <GuestNavBar />
           </div>
           <Routes>

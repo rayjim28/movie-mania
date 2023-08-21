@@ -1,7 +1,7 @@
-.navbar-brand {
+/* .navbar-brand {
     text-decoration: none;
     padding: 0.5rem 1rem;
-    color: black;
+    color: rgb(253, 232, 232);
     transition: box-shadow 0.3s;
 }
 
@@ -16,8 +16,8 @@
 }
 
 .nav-link:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+    box-shadow: 0 0 10px rgba(255, 3, 3, 0.2);
+} */
 
 
 
