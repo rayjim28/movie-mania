@@ -36,7 +36,7 @@ export default function NavBar({ user, setUser }) {
             {/* Navigation item for the Rental History page */}
             <li className="nav-item">
               <Link
-                className="nav-link active"
+                className="nav-link ms-3"
                 aria-current="page"
                 to="/orders"
               >

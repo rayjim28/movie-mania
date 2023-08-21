@@ -1,11 +1,20 @@
+.container {
+    display: block; 
+}
+
 .home-movie-posters {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
     justify-content: center;
-}
-
-.poster-path:hover {
-    transform: scale(1.02);
-    cursor: pointer;
-}
+    gap: 16px; 
+  }
+  
+  .poster-path {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  
+  .poster-path:hover {
+    transform: scale(1.05);
+  }

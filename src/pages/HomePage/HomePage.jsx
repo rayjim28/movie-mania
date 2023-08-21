@@ -29,25 +29,27 @@ function HomePage() {
   });
 
   return (
-    <div>
-      <h1>Popular Movies</h1>
-      <div className="home-movie-posters">
-        {movies.map((elm, idx) => {
-          return (
-            <div
-              className="poster-path"
-              key={idx}
-              style={{
-                backgroundImage: `url("https://www.themoviedb.org/t/p/original${elm.poster_path}")`,
-                height: "600px",
-                width: "400px",
-                backgroundSize: "cover",
-              }}
-            ></div>
-          );
-        })}
-      </div>
-    </div>
+    
+    <div className="container mt-5">
+  <h1 className="mb-4">Popular Movies</h1>
+  <div className="home-movie-posters">
+    {movies.map((elm, idx) => {
+      return (
+        <div
+          className="poster-path mb-4"
+          key={idx}
+          style={{
+            backgroundImage: `url("https://www.themoviedb.org/t/p/original${elm.poster_path}")`,
+            height: "300px",
+            width: "200px",
+            backgroundSize: "cover",
+          }}
+        ></div>
+      );
+    })}
+  </div>
+</div>
+
   );
 }
 
