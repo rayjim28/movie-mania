@@ -1,12 +1,12 @@
 .navbar-brand {
     text-decoration: none;
     padding: 0.5rem 1rem;
-    color: rgb(254, 254, 254);
+    color: white !important;
     transition: box-shadow 0.3s;
 }
 
 .navbar-brand:hover {
-    box-shadow: 0 0 10px rgba(253, 251, 251, 0.2);
+    box-shadow: 0 0 10px white;
 }
 
 .navbar-link {
@@ -20,7 +20,11 @@
 }
 
 .custom-navbar {
-    background-color: #00695dcf;  /* Deep Teal */
+    background-color: #00695dcf; 
+}
+
+.custom-navbar .nav-link {
+    color: white;
 }
 
 .nav-item {

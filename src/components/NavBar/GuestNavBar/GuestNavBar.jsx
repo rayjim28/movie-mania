@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import "../NavBar.css";
+import "../GuestNavBar/GuestNavBar.css";
 
 export default function GuestNavBar() {
   // Function for handling the log in action
   async function handleLogIn() {}
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-light guest-navbar">
       <div className="container-fluid">
         {/* Brand link to the home page */}
         <Link className="navbar-brand" to="/">
@@ -43,6 +43,6 @@ export default function GuestNavBar() {
           </ul>
         </div>
       </div>
-    </nav>
+</nav>
   );
 }

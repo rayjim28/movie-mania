@@ -9,6 +9,7 @@ export default class SignUpForm extends Component {
     password: "",
     confirm: "",
     error: "",
+    isLoading: false,
   };
 
   // Event handler for input changes
@@ -37,6 +38,7 @@ export default class SignUpForm extends Component {
       // Handle errors if sign up fails
       this.setState({ error: "Sign Up Failed - Try Again" });
     }
+    this.setState({ isLoading: false });
   };
 
   render() {
@@ -44,77 +46,77 @@ export default class SignUpForm extends Component {
     const disable = this.state.password !== this.state.confirm;
 
     return (
-      <div>
-        <div className="container">
-          <div
-            className="row justify-content-center align-items-center"
-            style={{ height: "50vh" }}>
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-body">
-                  <form autoComplete="off" onSubmit={this.handleSubmit}>
-                    {/* Name input field */}
-                    <div className="mb-3">
-                      <label htmlFor="name" className="form-label">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        className="form-control"
-                        name="name"
-                        value={this.state.name}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </div>
-                    {/* Email input field */}
-                    <div className="mb-3">
-                      <label htmlFor="email" className="form-label">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        className="form-control"
-                        name="email"
-                        value={this.state.email}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </div>
-                    {/* Password input field */}
-                    <div className="mb-3">
-                      <label htmlFor="password" className="form-label">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        id="password"
-                        className="form-control"
-                        name="password"
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </div>
-                    {/* Confirm Password input field */}
-                    <div className="mb-3">
-                      <label htmlFor="confirm" className="form-label">
-                        Confirm Password
-                      </label>
-                      <input
-                        type="password"
-                        id="confirm"
-                        className="form-control"
-                        name="confirm"
-                        value={this.state.confirm}
-                        onChange={this.handleChange}
-                        required
-                      />
-                    </div>
-                    {/* Sign Up button */}
-                    <div className="text-center mt-4">
+      <div className="container mt-5">
+        <div className="row justify-content-center align-items-center">
+          <div className="col-md-6">
+            <div className="card animate__animated animate__fadeIn">
+              <div className="card-header text-center">
+                <h4>Sign Up</h4>
+              </div>
+              <div className="card-body">
+                <form autoComplete="off" onSubmit={this.handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="name" className="form-label">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      className="form-control"
+                      name="name"
+                      value={this.state.name}
+                      onChange={this.handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-control"
+                      name="email"
+                      value={this.state.email}
+                      onChange={this.handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      className="form-control"
+                      name="password"
+                      value={this.state.password}
+                      onChange={this.handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="confirm" className="form-label">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      id="confirm"
+                      className="form-control"
+                      name="confirm"
+                      value={this.state.confirm}
+                      onChange={this.handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="text-center mt-4">
+                    {this.state.isLoading ? (
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                    ) : (
                       <button
                         type="submit"
                         className="btn btn-success animate__animated animate__bounceIn"
@@ -122,11 +124,14 @@ export default class SignUpForm extends Component {
                       >
                         Sign Up
                       </button>
-                    </div>
-                  </form>
-                  {/* Error message */}
-                  <p className="error-message mt-3">{this.state.error}</p>
-                </div>
+                    )}
+                  </div>
+                </form>
+                {this.state.error && (
+                  <p className="text-danger text-center mt-3">
+                    {this.state.error}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -135,5 +140,3 @@ export default class SignUpForm extends Component {
     );
   }
 }
-
-

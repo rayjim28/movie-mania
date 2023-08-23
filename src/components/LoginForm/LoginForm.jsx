@@ -4,6 +4,7 @@ import { login } from "../../utilities/users-service";
 export default function LoginForm({ setUser }) {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleChange(evt) {
     // Update the corresponding input field value in the credentials state
@@ -14,6 +15,7 @@ export default function LoginForm({ setUser }) {
   // Handle form submission
   async function handleSubmit(evt) {
     evt.preventDefault();
+    setIsLoading(true);
 
     try {
       // Call the login function from the users-service utility to log in the user
@@ -23,6 +25,7 @@ export default function LoginForm({ setUser }) {
       // Handle login errors
       setError("Log In Failed - Try Again");
     }
+    setIsLoading(false);
   }
 
   return (
@@ -61,12 +64,18 @@ export default function LoginForm({ setUser }) {
                   />
                 </div>
                 <div className="text-center mt-4">
-                  <button
-                    type="submit"
-                    className="btn btn-primary animate__animated animate__bounceIn"
-                  >
-                    Log In
-                  </button>
+                  {isLoading ? (
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn-primary animate__animated animate__bounceIn"
+                    >
+                      Log In
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

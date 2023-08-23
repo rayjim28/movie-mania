@@ -1,23 +1,27 @@
-/* .navbar-brand {
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    color: rgb(253, 232, 232);
-    transition: box-shadow 0.3s;
+.guest-navbar {
+    background-color: #003366;  
 }
 
-.navbar-brand:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+.guest-navbar .nav-link {
+    color: white;  
 }
 
-.navbar-link {
-    font-size: 20px;
-    border: none;
-    background-color: black;
+.guest-navbar .navbar-brand {
+    color: white;  
 }
 
-.nav-link:hover {
-    box-shadow: 0 0 10px rgba(255, 3, 3, 0.2);
-} */
+.nav-item {
+    margin-right: 20px;  
+}
 
+/* Reduce vertical padding for the navbar */
+.navbar {
+    padding-top: 0.25rem;  
+    padding-bottom: 0.25rem;
+}
 
-
+/* Adjusting the size of navbar-brand */
+.navbar-brand {
+    font-size: 1.25rem;
+}
