@@ -1,0 +1,24 @@
+.aspect-ratio-box {
+    position: relative;
+    width: 100%;
+    padding-bottom: 150%; /* This determines the aspect ratio, in this case, 2:3 */
+    background-color: #f8f9fa; 
+    overflow: hidden;
+}
+
+.aspect-ratio-box img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This prevents the image from stretching */
+}
+
+.card-body {
+    padding-top: 10px; /* Add more padding if the titles are too high */
+}
+
+.card-column {
+    margin-bottom: 20px; 
+}

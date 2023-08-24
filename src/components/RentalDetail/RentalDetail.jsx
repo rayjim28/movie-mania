@@ -7,13 +7,13 @@ export default function RentalDetail({ rental, removeRentalMovie }) {
   };
 
   return (
-    <div className="row rental-row">
+    <div className="row rental-row mt-4 align-items-center">
       {/* Display the rental movie's poster */}
       <div className="col-md-3">
         <img
           src={rental.poster}
           alt="Movie Poster"
-          className="img-fluid poster-image"
+          className="img-fluid rounded poster-image"
         />
       </div>
 
@@ -24,7 +24,7 @@ export default function RentalDetail({ rental, removeRentalMovie }) {
 
       {/* Display the rental movie's price */}
       <div className="col-md-3">
-        <div className="return-price">Price: ${rental.price}</div>
+        <div className="return-price badge bg-secondary">Price: ${rental.price}</div>
       </div>
 
       {/* Button for removing the rental movie */}

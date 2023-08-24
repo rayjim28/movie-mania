@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import * as rentalsApi from "../../utilities/rentals-api";
+import "../RentalHistoryPage/RentalHistoryPage.css"
 
 export default function RentalHistoryPage() {
   // State variable to hold rental history data
@@ -24,46 +25,36 @@ export default function RentalHistoryPage() {
   }
 
   return (
-    <div>
+    <div className="container mt-4">
       <div className="row">
         <div className="col">
-          <h1 className="mt-4">Rental History Page</h1>
+          <h1>Rental History</h1>
         </div>
       </div>
-      <div className="container">
-        <div className="row">
-          {/* Iterate over the rentalHistory array and render rental cards */}
-          {rentalHistory.map((rental) => (
-            <div className="col-3" key={rental._id}>
-              <div className="card-group">
-                <div key={rental._id} className="card">
-                  <div className="card-body">
-                    {/* Display movie poster */}
-                    <img
-                      object-fit="contain"
-                      className="card-img"
-                      height="300px"
-                      src={rental.movies[0].poster}
-                      alt="Card cap"
-                    />
-                    {/* Display rental order number */}
-                    <h5 className="card-order#">Order # {rental._id}</h5>
-                    {/* Display rental date */}
-                    <p className="card-text">
+      <div className="row mt-4">
+        {rentalHistory.map((rental) => (
+          <div className="col-3 card-column" key={rental._id}>
+            <div className="card">
+              {/* Aspect ratio box for image */}
+              <div className="aspect-ratio-box">
+                  <img src={rental.movies[0].poster} alt="Movie Poster" />
+              </div>
+              
+              {/* Card body for order details */}
+              <div className="card-body">
+                  <h5 className="card-title">Order # {rental._id.slice(-8)}</h5>
+                  <p className="card-text">
                       {new Date(rental.rentalDate).toLocaleDateString()}
-                    </p>
-                    {/* Display rental total */}
-                    <p className="card-text">Total: ${rental.total}</p>
-                  </div>
-                </div>
+                  </p>
+                  <p className="card-text">Total: ${rental.total}</p>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
-  );
-}
+);
+        }
 
 // import { checkToken } from "../../utilities/users-service";
 // async function handleCheckToken() {
