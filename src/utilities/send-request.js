@@ -30,6 +30,8 @@ export default async function sendRequest(url, method = "GET", payload = null) {
   if (res.ok) {
     return res.json(); // Return the JSON response
   } else {
-    throw new Error("Bad Request"); // Throw an error for unsuccessful response
+    let detail;
+    try { detail = await res.json(); } catch { detail = null; }
+    throw new Error(typeof detail === "string" ? detail : detail?.error || detail?.message || `Request failed (${res.status})`);
   }
 }

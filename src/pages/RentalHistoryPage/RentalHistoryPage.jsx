@@ -1,70 +1,13 @@
-import { useState, useEffect } from "react";
-import * as rentalsApi from "../../utilities/rentals-api";
-import "../RentalHistoryPage/RentalHistoryPage.css"
-
-export default function RentalHistoryPage() {
-  // State variable to hold rental history data
-  const [rentalHistory, setRentalHistory] = useState([]);
-
-  // Fetch rental history data when the component mounts
-  useEffect(() => {
-    fetchRentalHistory();
-  }, []);
-
-  // Function to fetch rental history data from the backend
-  async function fetchRentalHistory() {
-    try {
-      // Call the getRentalHistory function from rentalsApi to fetch rental history data
-      const response = await rentalsApi.getRentalHistory();
-      console.log(response); // Log the response for debugging
-      setRentalHistory(response); // Update the rentalHistory state with the fetched data
-    } catch (error) {
-      console.log(error); // Log any errors that occur during the fetch
-      // Handle error condition
-    }
-  }
-
-  return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="col">
-          <h1>Rental History</h1>
-        </div>
-      </div>
-      <div className="row mt-4">
-        {rentalHistory.map((rental) => (
-          <div className="col-3 card-column" key={rental._id}>
-            <div className="card">
-              {/* Aspect ratio box for image */}
-              <div className="aspect-ratio-box">
-                  <img src={rental.movies[0].poster} alt="Movie Poster" />
-              </div>
-              
-              {/* Card body for order details */}
-              <div className="card-body">
-                  <h5 className="card-title">Order # {rental._id.slice(-8)}</h5>
-                  <p className="card-text">
-                      {new Date(rental.rentalDate).toLocaleDateString()}
-                  </p>
-                  <p className="card-text">Total: ${rental.total}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-);
-        }
-
-// import { checkToken } from "../../utilities/users-service";
-// async function handleCheckToken() {
-//   const expDate = await checkToken();
-//   console.log(expDate);
-// }
-
-/* <button onClick={handleCheckToken}>
-        Check When My Login Expires
-      </button> */
-
-/* Display rental total */
-/* <a href="#" className="btn btn-primary">Order Detail</a> */
+import { useState,useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import * as api from '../../utilities/rentals-api';
+import Icon from '../../components/Icons';
+import PosterArtwork from '../../components/PosterArtwork/PosterArtwork';
+export default function RentalHistoryPage(){
+ const [orders,setOrders]=useState([]);const [loading,setLoading]=useState(true);const [error,setError]=useState('');
+ useEffect(()=>{let active=true;api.getRentalHistory().then(data=>{if(active)setOrders(Array.isArray(data)?data:[]);}).catch(err=>{if(active)setError(err.message || 'Unable to load rentals.');}).finally(()=>{if(active)setLoading(false);});return()=>{active=false;};},[]);
+ return <div className="history-page content-width"><div className="browse-top"><div><div className="eyebrow red">YOUR COLLECTION</div><h1>Rental <em>history.</em></h1><p>Your confirmed demo rentals, all in one place.</p></div><Link to="/movies" className="button-outline">Explore more <Icon name="arrow" size={18}/></Link></div>
+ {loading?<div className="notice-card">Loading your rental history…</div>:error?<div className="notice-card form-error">{error}</div>:!orders.length?<div className="notice-card history-empty"><Icon name="ticket" size={35}/><h2>No rentals yet.</h2><p>When you confirm a rental, it will show up here.</p><Link to="/movies" className="button-primary">Find a movie <Icon name="arrow" size={17}/></Link></div>:
+ <div className="history-grid">{orders.map(order=><article className="history-card" key={order._id}><div className="history-head"><span>ORDER #{String(order._id || '').slice(-8).toUpperCase()}</span><span><Icon name="check" size={13}/> CONFIRMED</span></div><div className="history-posters">{(order.movies||[]).slice(0,4).map(movie=><PosterArtwork key={movie._id || movie.imdbID} className="history-poster-fallback" src={movie.poster} title={movie.title} />)}</div><div className="history-bottom"><div><h3>{(order.movies||[]).length} movie{order.movies?.length===1?'':'s'} rented</h3><p><Icon name="clock" size={15}/> {order.rentalDate ? new Date(order.rentalDate).toLocaleDateString(): 'Date unavailable'}</p></div><strong>${Number(order.orderTotal ?? (order.movies||[]).reduce((sum,movie)=>sum+(Number(movie.price)||0),0)).toFixed(2)}</strong></div><div className="history-titles">{(order.movies||[]).map(movie=>movie.title).join(' · ')}</div></article>)}</div>}
+ </div>;
+}

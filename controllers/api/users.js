@@ -12,7 +12,7 @@ async function create(req, res) {
     const token = createJWT(user);
     res.json(token);
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json({ error: err.code === 11000 ? "An account with that email already exists." : "Could not create account. Please check your details." });
   }
 }
 
@@ -43,13 +43,11 @@ async function login(req, res) {
 // Check the validity of a token
 function checkToken(req, res) {
   // req.user will always be available when a token is sent
-  console.log("req.user", req.user);
   res.json(req.exp);
 }
 
 // Create a JSON Web Token (JWT) for a user
 function createJWT(user) {
-  console.log("this is secret in createJWT", process.env.SECRET);
   return jwt.sign(
     // Data payload
     { user },

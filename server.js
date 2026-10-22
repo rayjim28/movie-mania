@@ -42,6 +42,7 @@ const port = process.env.PORT || 3001;
 
 // Mount the users API routes under "/api/users" path
 app.use("/api/users", require("./routes/api/users"));
+app.use("/api/movies", require("./routes/api/movies"));
 
 // Mount the rentals API routes under "/api/rentals" path
 // Ensure that the user is logged in before accessing the rentals routes

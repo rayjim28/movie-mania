@@ -1,7 +1,7 @@
 import sendRequest from "./send-request";
 
 // Define the base URL for user-related API endpoints
-const BASE_URL = "https://movie-mania-api.onrender.com/api/users";
+const BASE_URL = "/api/users";
 
 // Function to sign up a new user
 export async function signUp(userData) {
