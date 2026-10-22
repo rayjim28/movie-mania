@@ -18,7 +18,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "vite",
+    "start": "node server.js",
     "build": "vite build",
     "check:movies": "node scripts/check-movies.js && node scripts/check-pagination.js",
     "dev": "vite",
