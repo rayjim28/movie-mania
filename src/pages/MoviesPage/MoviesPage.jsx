@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import Icon from '../../components/Icons';
+import apiUrl from '../../utilities/api-url';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import MovieModal from '../../components/MovieModal/MovieModal';
 import PosterArtwork from '../../components/PosterArtwork/PosterArtwork';
@@ -32,7 +33,7 @@ export default function MoviesPage({ user }) {
  useEffect(() => { setInput(query); }, [query]);
  useEffect(() => {
    const controller = new AbortController();
-   fetch('/api/movies/curated', { signal: controller.signal })
+   fetch(apiUrl('/api/movies/curated'), { signal: controller.signal })
     .then(response => response.ok ? response.json() : Promise.reject(new Error('Collection unavailable')))
     .then(data => setCuratedMovies(data.movies || []))
     .catch(() => {});
@@ -42,7 +43,7 @@ export default function MoviesPage({ user }) {
    if (query.length < 2) {setMovies([]);setTotal(0);setSearchError('');setProviderNote('');setLoading(false);return;}
    const controller = new AbortController();
    setLoading(true);setSearchError('');setProviderNote('');
-   fetch(`/api/movies/search?q=${encodeURIComponent(query)}&page=${page}`, {signal:controller.signal})
+   fetch(apiUrl(`/api/movies/search?q=${encodeURIComponent(query)}&page=${page}`), {signal:controller.signal})
     .then(async response => {const data=await response.json();if(!response.ok) throw new Error(data.error || 'Movie search failed');return data;})
     .then(data => {
        setMovies(data.movies || []);setTotal(data.total || 0);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Icon from '../../components/Icons';
+import apiUrl from '../../utilities/api-url';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import MovieModal from '../../components/MovieModal/MovieModal';
 export default function HomePage({user}) {
@@ -13,7 +14,7 @@ export default function HomePage({user}) {
  const navigate = useNavigate();
  useEffect(() => {
   const controller = new AbortController();
-  fetch('/api/movies/featured', {signal: controller.signal}).then(async r => {const json=await r.json();if(!r.ok) throw new Error(json.error || 'Could not load movies');return json;}).then(data=>{setMovies(data.movies || []);setStatus('ready');}).catch(error=>{if(error.name!=='AbortError'){setMessage(error.message);setStatus('error');}});
+  fetch(apiUrl('/api/movies/featured'), {signal: controller.signal}).then(async r => {const json=await r.json();if(!r.ok) throw new Error(json.error || 'Could not load movies');return json;}).then(data=>{setMovies(data.movies || []);setStatus('ready');}).catch(error=>{if(error.name!=='AbortError'){setMessage(error.message);setStatus('error');}});
   return () => controller.abort();
  }, []);
  const hero = movies[0];

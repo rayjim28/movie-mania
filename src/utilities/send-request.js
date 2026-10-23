@@ -1,4 +1,5 @@
 import { getToken } from "./users-service";
+import apiUrl from "./api-url";
 
 // Function to send an HTTP request to the specified URL with the given method and payload
 export default async function sendRequest(url, method = "GET", payload = null) {
@@ -24,7 +25,7 @@ export default async function sendRequest(url, method = "GET", payload = null) {
   }
 
   // Send the HTTP request using fetch
-  const res = await fetch(url, options);
+  const res = await fetch(apiUrl(url), options);
 
   // Check if the response is successful (status code 2xx)
   if (res.ok) {

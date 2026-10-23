@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Icon from '../Icons';
+import apiUrl from '../../utilities/api-url';
 import PosterArtwork from '../PosterArtwork/PosterArtwork';
 
 const valuePresent = value => value && value !== 'N/A';
@@ -20,7 +21,7 @@ export default function MovieModal({ movie, onClose, onRent, actionLabel, isInCa
    setDetail(null); setError(''); setLoading(Boolean(imdbID));
    if (!movie || !imdbID) return;
    const controller = new AbortController();
-   fetch(`/api/movies/detail?id=${encodeURIComponent(imdbID)}`, {signal: controller.signal})
+   fetch(apiUrl(`/api/movies/detail?id=${encodeURIComponent(imdbID)}`), {signal: controller.signal})
     .then(async res => {if (!res.ok) throw new Error('Details unavailable');return res.json();})
     .then(data => {setDetail(data);setLoading(false);})
     .catch(err => {if(err.name !== 'AbortError'){setError('Additional movie details are unavailable.');setLoading(false);}});
