@@ -1,184 +1,118 @@
-import { useState, useEffect } from "react";
-import "./MoviesPage.css";
-import MovieList from "../../components/MovieList/MovieList";
-import MovieHeading from "../../components/MovieHeading/MovieHeading";
-import SearchMovie from "../../components/SearchMovie/SearchMovie";
-import { addToCart, checkout, getCart } from "../../utilities/rentals-api";
-import { getUser } from "../../utilities/users-service";
-import CartList from "../../components/CartList/CartList";
-import { removeFromCart } from "../../utilities/rentals-api";
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import Icon from '../../components/Icons';
+import apiUrl from '../../utilities/api-url';
+import MovieCard from '../../components/MovieCard/MovieCard';
+import MovieModal from '../../components/MovieModal/MovieModal';
+import PosterArtwork from '../../components/PosterArtwork/PosterArtwork';
+import { addToCart, checkout, getCart, removeFromCart } from '../../utilities/rentals-api';
 
-const API_KEY = process.env.REACT_APP_API_KEY || "69f40c47";
+const GENRES = ['All films', 'Action', 'Sci-Fi', 'Drama', 'Crime', 'Adventure', 'Animation'];
+const PER_PAGE = 10; // OMDb returns ten films at a time.
 
-export default function MoviesPage() {
-  // State variables to hold movie data and rental list
-  const [movies, setMovies] = useState([]);
-  const [searchMovie, setSearchMovie] = useState("");
-  const [rentals, setRentals] = useState([]);
+export default function MoviesPage({ user }) {
+ const [params, setParams] = useSearchParams();
+ const navigate = useNavigate();
+ const query = (params.get('q') || '').trim();
+ const activeGenre = GENRES.includes(params.get('genre')) ? params.get('genre') : 'All films';
+ const page = Math.max(1, Math.min(100, Number.parseInt(params.get('page'), 10) || 1));
+ const [input, setInput] = useState(query);
+ const [movies, setMovies] = useState([]);
+ const [total, setTotal] = useState(0);
+ const [loading, setLoading] = useState(false);
+ const [searchError, setSearchError] = useState('');
+ const [selected, setSelected] = useState(null);
+ const [rentals, setRentals] = useState([]);
+ const [cartLoading, setCartLoading] = useState(false);
+ const [cartError, setCartError] = useState('');
+ const [notice, setNotice] = useState('');
+ const [curatedMovies, setCuratedMovies] = useState([]);
+ const [providerNote, setProviderNote] = useState('');
+ const resultsTop = useRef(null);
 
-  // Fetch movie data from the API based on the search query
-  async function getMovieRequest(searchMovie) {
-    let url;
+ useEffect(() => { setInput(query); }, [query]);
+ useEffect(() => {
+   const controller = new AbortController();
+   fetch(apiUrl('/api/movies/curated'), { signal: controller.signal })
+    .then(response => response.ok ? response.json() : Promise.reject(new Error('Collection unavailable')))
+    .then(data => setCuratedMovies(data.movies || []))
+    .catch(() => {});
+   return () => controller.abort();
+ }, []);
+ useEffect(() => {
+   if (query.length < 2) {setMovies([]);setTotal(0);setSearchError('');setProviderNote('');setLoading(false);return;}
+   const controller = new AbortController();
+   setLoading(true);setSearchError('');setProviderNote('');
+   fetch(apiUrl(`/api/movies/search?q=${encodeURIComponent(query)}&page=${page}`), {signal:controller.signal})
+    .then(async response => {const data=await response.json();if(!response.ok) throw new Error(data.error || 'Movie search failed');return data;})
+    .then(data => {
+       setMovies(data.movies || []);setTotal(data.total || 0);
+       setSearchError(data.movies?.length ? '' : (data.message || 'No matches found.'));
+       setProviderNote(data.source==='curated' ? (data.message || 'Showing starter collection matches.') : '');
+       setLoading(false);
+    })
+    .catch(error => {if(error.name !== 'AbortError'){setMovies([]);setSearchError(error.message);setLoading(false);}});
+   return () => controller.abort();
+ }, [query,page]);
 
-    if (searchMovie === "") {
-      return Promise.resolve();
-    }
+ const refreshCart = useCallback(async () => {
+   if (!user) return;
+   try {const cart=await getCart();setRentals(cart.movies || []);setCartError('');}
+   catch(error){setCartError(error.message || 'Unable to load your rental list.');}
+ },[user]);
+ useEffect(() => {refreshCart();}, [refreshCart]);
 
-    // Check if the searchMovie starts with "a" indicating an individual search
-    if (searchMovie.startsWith("a")) {
-      // If it starts with "a", construct the URL for individual search
-      url = `https://www.omdbapi.com/?i=${searchMovie}&apikey=${API_KEY}`;
-    } else {
-      // If it doesn't start with "a", construct the URL for general search
-      url = `https://www.omdbapi.com/?s=${searchMovie}&apikey=${API_KEY}`;
-    }
+ function submitSearch(event) {
+   event.preventDefault();
+   const term=input.trim();
+   setParams(term ? {q:term} : {});
+ }
+ function setGenre(genre) {setInput('');setParams(genre==='All films' ? {} : {genre});}
+ function goToPage(next) {
+   setParams({q:query,page:String(next)});
+   resultsTop.current?.scrollIntoView({behavior:'smooth',block:'start'});
+ }
+ async function handleRent(movie) {
+   if(!user) {navigate('/login');return;}
+   const id = movie.imdbID || movie.id;
+   if (rentals.some(r => r.imdbID === id)) {setNotice('Already in your rental list.');return;}
+   if(!id || !String(id).startsWith('tt')) {setNotice('Find this movie in search before adding it.');return;}
+   setCartLoading(true);setNotice('');setCartError('');
+   try {
+     const now=new Date();const due=new Date(now);due.setDate(due.getDate()+7);
+     await addToCart({movie:{imdbID:id,title:movie.Title || movie.title,poster:(movie.Poster || movie.poster) && (movie.Poster || movie.poster)!=='N/A'?(movie.Poster || movie.poster):'/poster-placeholder.svg'},rentalDate:now.toISOString(),returnDate:due.toISOString()});
+     await refreshCart();setNotice(`${movie.Title || movie.title} added to your list.`);setSelected(null);
+   } catch(error){setCartError(error.message || 'Could not add movie.');}
+   finally {setCartLoading(false);}
+ }
+ async function remove(movie) {setNotice('');setCartLoading(true);setCartError('');try{await removeFromCart(movie.imdbID);await refreshCart();}catch(error){setCartError(error.message || 'Could not remove movie.');}finally{setCartLoading(false);}}
+ async function finish(){if(!rentals.length)return;setCartLoading(true);setCartError('');try{await checkout(rentals);setRentals([]);setNotice('Rental confirmed! View your rental history for details.');}catch(error){setCartError(error.message || 'Unable to confirm rental.');}finally{setCartLoading(false);}}
 
-    try {
-      // Fetch movie data from the API
-      const response = await fetch(url);
-      const responseJson = await response.json();
-
-      // Check if the response has a "Search" property, indicating multiple movies were found
-      if (responseJson.Search) {
-        // Set the found movies as the state
-        const movies = responseJson.Search.map((movie) => {
-          if (movie.Poster === "N/A") {
-            // If the movie poster is not available, use a placeholder image
-            movie.Poster = "https://via.placeholder.com/300x300";
-          }
-          return movie;
-        });
-        setMovies(movies);
-      } else if (responseJson.Title) {
-        // If the response doesn't have a "Search" property but has a "Title" property,
-        // it means a single movie was found
-        // Set the single movie as the state (convert it into an array)
-        setMovies([responseJson]);
-      } else if (responseJson.Error) {
-        // If the response has an "Error" property, it means no movies were found
-        // Set the movies state to an empty array
-        setMovies([]);
-        console.log(responseJson.Error);
-      }
-    } catch (error) {
-      // Handle any errors that occur during the API request
-      console.log("Error fetching movie data:", error.message);
-    }
-  }
-
-  // Trigger the movie search request when searchMovie state changes
-  useEffect(() => {
-    getMovieRequest(searchMovie);
-  }, [searchMovie]);
-
-  // Function to handle checkout and create the rental in the backend
-  async function handleCheckout() {
-    try {
-      const createdRental = await checkout(rentals);
-      setRentals([]); // Rental successfully created in the backend
-      console.log("Rental created in the backend:", createdRental);
-    } catch (error) {
-      console.log("Error creating rental:", error);
-    }
-  }
-
-  // Function to remove a movie from the rental list
-  async function removeRentalMovie(rentalId) {
-    try {
-      await removeFromCart(rentalId);
-      const newRentalList = rentals.filter(
-        (rental) => rental.imdbID !== rentalId
-      );
-      setRentals(newRentalList);
-    } catch (error) {
-      console.log("Error removing rental movie:", error);
-    }
-  }
-
-  // Function to add a movie to the rental list and save it to the backend
-  async function addMovieToRent(movie) {
-    const isDuplicate = rentals.some(
-      (rental) => rental.imdbID === movie.imdbID
-    );
-
-    // If it's a duplicate, return early and don't add it to the rental list
-    if (isDuplicate) {
-      console.log("Movie is already in the rental list");
-      return;
-    }
-
-    try {
-      // Create the rental in the backend
-      const user = getUser();
-      const sevenDaysFromNow = new Date();
-      sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
-
-      const rentalData = {
-        userId: user._id,
-        movie: {
-          imdbID: movie.imdbID,
-          title: movie.Title,
-          poster: movie.Poster,
-        },
-        rentalDate: new Date(),
-        returnDate: new Date(sevenDaysFromNow),
-      };
-
-      const createdRental = await addToCart(rentalData);
-
-      const newMovie = {
-        userId: user._id,
-        imdbID: movie.imdbID,
-        title: movie.Title,
-        poster: movie.Poster,
-        rentalDate: new Date(),
-        returnDate: new Date(sevenDaysFromNow),
-        price: createdRental.movies[0].price,
-      };
-
-      const newRentalList = [...rentals, newMovie];
-      setRentals(newRentalList);
-    } catch (error) {
-      console.log("Error creating rental:", error);
-    }
-  }
-
-  // Fetch the rental list from the backend
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const rentalsData = await getCart();
-        setRentals(rentalsData.movies);
-      } catch (error) {
-        console.log("Error fetching rentals:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <div className="container-fluid">
-    <div className="row">
-      {/* Movie section */}
-      <div className="col-md-8">
-        {/* Movie heading */}
-        <MovieHeading heading="Movies" />
-        {/* Search input */}
-        <SearchMovie searchMovie={searchMovie} setSearchMovie={setSearchMovie} />
-        {/* Movie list */}
-        <MovieList movies={movies} handleRentMovieClick={addMovieToRent} guest={false} />
-      </div>
-      {/* Cart section */}
-      <div className="col-md-4">
-        {/* Cart list */}
-        <CartList
-          rentals={rentals}
-          handleCheckout={handleCheckout}
-          removeRentalMovie={removeRentalMovie}
-        />
-      </div>
-    </div>
-  </div>
-  );
+ const cartIds = new Set(rentals.map(movie => movie.imdbID));
+ const totalPrice = rentals.reduce((sum,item)=>sum+(Number(item.price)||0),0);
+ const visibleCollection = activeGenre === 'All films' ? curatedMovies : curatedMovies.filter(movie => String(movie.genre || movie.Genre || '').toLowerCase().split(',').some(g => g.trim()===activeGenre.toLowerCase() || (activeGenre==='Sci-Fi' && g.trim()==='science fiction')));
+ const lastPage = Math.max(1,Math.min(100,Math.ceil(total/PER_PAGE)));
+ const firstResult = (page-1)*PER_PAGE+1;
+ const lastResult = Math.min(total,page*PER_PAGE);
+ return <div className="browse-page content-width">
+   <div className="browse-top"><div><div className="eyebrow red">EXPLORE THE COLLECTION</div><h1>Find something <em>worth watching.</em></h1><p>Explore great films, see the details that matter, and plan your next movie night.</p></div><span className="browse-decoration" aria-hidden="true">M<span>✳</span>M</span></div>
+   <form className="main-search" onSubmit={submitSearch} role="search"><Icon name="search" size={23}/><input aria-label="Search movie titles" value={input} onChange={event => setInput(event.target.value)} placeholder="Search movie titles, e.g. The Dark Knight"/><button className="button-primary" type="submit">Search <Icon name="arrow" size={18}/></button></form>
+   <div className="browse-layout"><section className="browse-results" aria-live="polite" ref={resultsTop}>
+     <div className="browse-results-head"><h2>{query ? `Results for “${query}”` : activeGenre === 'All films' ? 'Handpicked films' : `${activeGenre} picks`}</h2><span>{loading?'SEARCHING…': query ? `${total.toLocaleString()} RESULTS` : `${visibleCollection.length} FILMS`}</span></div>
+     <div className="genre-section" aria-label="Starter collection genres">
+       <div className="genre-label"><span>EXPLORE BY GENRE</span><small>Handpicked collection</small></div>
+       <div className="genre-filters">{GENRES.map(genre => <button key={genre} type="button" aria-pressed={!query && activeGenre===genre} className={!query && activeGenre===genre ? 'genre-chip active':'genre-chip'} onClick={() => setGenre(genre)}>{genre}</button>)}</div>
+     </div>
+     {!query && <><div className="collection-intro"><span>{activeGenre === 'All films' ? 'THE EDITOR’S SELECTION' : `${activeGenre.toUpperCase()} COLLECTION`}</span><p>These featured picks are grouped by genre. Use the search above to discover more titles from OMDb.</p></div><div className="results-grid">{visibleCollection.map((movie,index)=><MovieCard key={movie.imdbID || movie.id} index={index} movie={movie} onDetails={setSelected} onRent={user ? handleRent : undefined} actionLabel={cartIds.has(movie.imdbID || movie.id)?'In rental list':'Add to rentals'} disabled={cartLoading || cartIds.has(movie.imdbID || movie.id)}/>)}</div>{visibleCollection.length===0 && <div className="notice-card"><h3>No films in this collection yet</h3><p>Try another genre or search for a movie title.</p></div>}</>}
+     {providerNote && query && !loading && <div className="provider-note" role="status">{providerNote}</div>}
+     {query && (loading ? <div className="results-grid">{Array.from({length:8}).map((_,i)=><div className="poster-skeleton" key={i}/>)}</div> : searchError && movies.length===0 ? <div className="notice-card"><h3>No movies to show</h3><p>{searchError}</p><p>Try a shorter title or a different spelling.</p></div> : <><p className="result-range">{total>0 ? `Showing ${firstResult}–${lastResult} of ${total.toLocaleString()} movies` : ''}</p><div className="results-grid">{movies.map((movie,index)=><MovieCard index={index} key={movie.imdbID || movie.id} movie={movie} onDetails={setSelected} onRent={user ? handleRent : undefined} actionLabel={cartIds.has(movie.imdbID || movie.id)?'In rental list':'Add to rentals'} disabled={cartLoading || cartIds.has(movie.imdbID || movie.id)}/>)}</div>{total>PER_PAGE && <nav className="pagination pagination-v3" aria-label="Movie search pages"><button type="button" disabled={page<=1 || loading} onClick={()=>goToPage(page-1)}>← Previous</button><span>Page <strong>{page}</strong> of {lastPage}</span><button type="button" disabled={page>=lastPage || loading} onClick={()=>goToPage(page+1)}>Next →</button></nav>}{total>1000 && <p className="pagination-note">OMDb makes up to 100 search pages available. Narrow your search to find more specific titles.</p>}</>)}
+   </section>
+   <aside className="cart-panel"><div className="cart-head"><span className="cart-icon"><Icon name="ticket" size={22}/></span><div><span className="eyebrow">YOUR MOVIE NIGHT</span><h2>Rental list <span>{rentals.length}</span></h2></div></div>
+     {user ? <><div className="cart-items">{rentals.length===0 ? <div className="empty-cart"><Icon name="film" size={36}/><strong>Nothing here yet.</strong><p>Explore the collection and add movies to get started.</p></div> : rentals.map(movie=><div className="cart-item" key={movie.imdbID}><PosterArtwork className="rental-poster" src={movie.poster} title={movie.title}/><div><strong>{movie.title}</strong><span>Rental · ${Number(movie.price||0).toFixed(2)}</span></div><button type="button" title={`Remove ${movie.title}`} aria-label={`Remove ${movie.title}`} onClick={()=>remove(movie)} disabled={cartLoading}><Icon name="close" size={17}/></button></div>)}</div>
+      {cartError && <div className="form-error" role="alert">{cartError}</div>}{notice && <div className="form-success" role="status">{notice}</div>}
+      <div className="cart-summary"><div><span>Subtotal</span><strong>${totalPrice.toFixed(2)}</strong></div><p>Demo rental only. No payment is collected.</p><button className="button-primary" disabled={!rentals.length || cartLoading} type="button" onClick={finish}>{cartLoading?'Working…':'Confirm rentals'} <Icon name="arrow" size={18}/></button>{rentals.length>0 && <Link to="/orders" className="cart-history-link">View rental history <Icon name="north" size={14}/></Link>}</div></> :
+      <div className="guest-cart"><p>Sign in to save movies and manage your rentals in one place.</p><Link className="button-primary" to="/login">Sign in / Sign up <Icon name="arrow" size={18}/></Link></div>}
+   </aside></div>
+   <MovieModal movie={selected} onClose={()=>setSelected(null)} onRent={selected ? handleRent : undefined} actionLabel={!user?'Sign in to rent':'Add to rentals'} isInCart={cartLoading || cartIds.has(selected?.imdbID || selected?.id)}/>
+ </div>;
 }

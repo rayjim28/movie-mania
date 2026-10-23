@@ -1,7 +1,7 @@
 import sendRequest from "./send-request";
 
 // Define the base URL for the rentals API
-const BASE_URL = "https://movie-mania-api.onrender.com/api/rentals";
+const BASE_URL = "/api/rentals";
 
 // Function to fetch rental history from the backend
 export async function getRentalHistory() {

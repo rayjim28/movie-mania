@@ -1,4 +1,5 @@
 import { getToken } from "./users-service";
+import apiUrl from "./api-url";
 
 // Function to send an HTTP request to the specified URL with the given method and payload
 export default async function sendRequest(url, method = "GET", payload = null) {
@@ -24,12 +25,14 @@ export default async function sendRequest(url, method = "GET", payload = null) {
   }
 
   // Send the HTTP request using fetch
-  const res = await fetch(url, options);
+  const res = await fetch(apiUrl(url), options);
 
   // Check if the response is successful (status code 2xx)
   if (res.ok) {
     return res.json(); // Return the JSON response
   } else {
-    throw new Error("Bad Request"); // Throw an error for unsuccessful response
+    let detail;
+    try { detail = await res.json(); } catch { detail = null; }
+    throw new Error(typeof detail === "string" ? detail : detail?.error || detail?.message || `Request failed (${res.status})`);
   }
 }

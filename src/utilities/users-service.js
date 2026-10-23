@@ -3,7 +3,7 @@ import * as usersApi from "./users-api";
 
 // Function to sign up a new user
 export async function signUp(userData) {
-  console.log("this is userData in service", userData);
+
 
   // Delegate the network request code to the users-api.js API Module
   // Which will ultimately return a JSON web Token
@@ -42,7 +42,8 @@ export function getToken() {
   if (!token) return null;
 
   // Decode the payload of the token
-  const payload = JSON.parse(atob(token.split(".")[1]));
+  let payload;
+  try { payload = JSON.parse(atob(token.split(".")[1])); } catch { localStorage.removeItem("token"); return null; }
 
   // Check if the token has expired
   if (payload.exp < Date.now() / 1000) {

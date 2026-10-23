@@ -1,68 +1,19 @@
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
-// import NewOrderPage from "../NewOrderPage/NewOrderPage";
-import AuthPage from "../AuthPage/AuthPage";
-import RentalHistoryPage from "../RentalHistoryPage/RentalHistoryPage";
-import NavBar from "../../components/NavBar/NavBar";
-import { getUser } from "../../utilities/users-service";
-import MoviesPage from "../MoviesPage/MoviesPage";
-import GuestNavBar from "../../components/NavBar/GuestNavBar/GuestNavBar";
-import GuestMoviesPage from "../GuestMoviesPage/GuestMoviesPage";
-import HomePage from "../HomePage/HomePage";
-import "./App.css";
-
-export default function App() {
-  // Use state hooks to manage the user and searchMovie state
-  const [user, setUser] = useState(getUser());
-  const [searchMovie, setSearchMovie] = useState("");
-
-  return (
-    <main className="App">
-      {user ? (
-        // Render components for authenticated user
-        <>
-          <div className="navbar-shadow-gradient">
-            <NavBar user={user} setUser={setUser} />
-          </div>
-          <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            {/* <Route path="/orders/new" element={<NewOrderPage />} /> */}
-            <Route path="/orders" element={<RentalHistoryPage />} />
-            <Route
-              path="/movies"
-              element={
-                <MoviesPage
-                  searchMovie={searchMovie}
-                  setSearchMovie={setSearchMovie}
-                />
-              }
-            />
-          </Routes>
-        </>
-      ) : (
-        // Render components for guest user
-        <>
-          <div className="navbar-shadow-gradient">
-            <GuestNavBar />
-          </div>
-          <Routes>
-            <Route exact path="/" element={<HomePage />} />
-            <Route
-              path="/login"
-              element={<AuthPage setUser={setUser} />}
-            ></Route>
-            <Route
-              path="/movies"
-              element={
-                <GuestMoviesPage
-                  searchMovie={searchMovie}
-                  setSearchMovie={setSearchMovie}
-                />
-              }
-            />
-          </Routes>
-        </>
-      )}
-    </main>
-  );
+import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AuthPage from '../AuthPage/AuthPage';
+import RentalHistoryPage from '../RentalHistoryPage/RentalHistoryPage';
+import NavBar from '../../components/NavBar/NavBar';
+import { getUser } from '../../utilities/users-service';
+import MoviesPage from '../MoviesPage/MoviesPage';
+import HomePage from '../HomePage/HomePage';
+import './App.css';
+export default function App(){
+ const [user,setUser] = useState(getUser());
+ return <div className="app-shell"><NavBar user={user} setUser={setUser}/><main id="main-content"><Routes>
+  <Route path="/" element={<HomePage user={user}/>}/>
+  <Route path="/login" element={user ? <Navigate to="/movies" replace/> : <AuthPage setUser={setUser}/>}/>
+  <Route path="/movies" element={<MoviesPage user={user}/>}/>
+  <Route path="/orders" element={user ? <RentalHistoryPage/> : <Navigate to="/login" replace/>}/>
+  <Route path="*" element={<Navigate to="/" replace/>}/>
+ </Routes></main><footer className="site-footer"><span className="footer-brand">moviemania<span>.</span></span><span>A movie discovery & rental demo · Built with React, Express and MongoDB.</span><a href="https://www.themoviedb.org/" target="_blank" rel="noreferrer">Movie data from TMDB / OMDb</a></footer></div>;
 }
